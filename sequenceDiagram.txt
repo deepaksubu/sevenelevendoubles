@@ -1,0 +1,22 @@
+title SevenElevenDoubles
+loop
+Simulator->PlayerManager: createPlayer
+PlayerManager->Simulator:ListOfPlayers
+end
+Simulator->PlayerManager:markFirstPlayerAsCurrent
+
+
+loop
+Simulator->PlayerManager:getPlayers
+PlayerManager->Simulator:Players
+alt One Player Is Left
+note left of Simulator: Game is Finished
+else More than One Player Is Left
+Simulator->Dice: Roll
+Dice->Simulator:ResultOfRole
+alt WinningRoll
+Simulator->PlayerManager:makePlayerSelectDrinker
+PlayerManager->Simulator:chosenPlayerForDrinking
+Simulator->
+else LoosingRoll
+Simulator->PlayerManager:
