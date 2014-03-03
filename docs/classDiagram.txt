@@ -1,0 +1,30 @@
+Simulator
+SPEED
+MAX
+List<Player> initialListOfPlayers
+PlayerManager playerManager;
+Dice;
+startGame
+simulateDiceRoll
+simulateDrinkerSelection
+getAndValidateTimeBetweenRolls()
+createAndValidatePlayer()
+getAndValidateMaxDrinks()
+
+PlayerManager
+Player currentPlayer
+List<Player> CurrentPlayers
+Player markAsNextPlayer(player name)
+List<Player> getPlayers()
+Player makePlayerDrink(Player name)
+
+Dice
+roll
+
+Player
+String name;
+int noOfDrinksFinished;
+int noOfDrinksDrinking;
+int speedOfDrinking;
+startDrinking();
+endDrinking();

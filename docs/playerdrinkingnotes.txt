@@ -1,0 +1,15 @@
+Option A:
+Use a different thread for each player.
+Create a timer task whenever a player wants to start drinking and start the task immediately.
+Pros:
+Easier to do.
+
+Cons:
+Managing timer task creation and destruction has a significant over head.
+At any time, if we have more than the maximum allowable limit of threads, then there maybe memory errors.
+Option B:
+Use a threadpool.
+Pros:
+There would be configuration overhead.
+Cons:
+Less management overhead for timer task creation and destruction
