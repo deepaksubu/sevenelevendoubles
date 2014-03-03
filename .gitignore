@@ -1,4 +1,5 @@
 *.class
 /.~lock.7-11-Doubles.docx#
 .idea/
-.target/
+target/
+*.iml
