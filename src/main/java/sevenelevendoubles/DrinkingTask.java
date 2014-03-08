@@ -1,17 +1,14 @@
 package sevenelevendoubles;
 
 /**
- * Created with IntelliJ IDEA.
+ * Keep track of a given player's state while drinking a single drink
  * User: deepak
- * Date: 3/2/14
- * Time: 5:51 PM
- * To change this template use File | Settings | File Templates.
  */
-public class PlayerDrinkTask implements Runnable {
+public class DrinkingTask implements Runnable {
 
     private Player player;
 
-    public PlayerDrinkTask(Player player) {
+    public DrinkingTask(Player player) {
         this.player = player;
     }
 
@@ -22,7 +19,7 @@ public class PlayerDrinkTask implements Runnable {
             Thread.sleep(player.getSpeedOfDrinking());
             player.endDrinking();
         } catch (InterruptedException e) {
-           System.out.println("Thread was interrupted");
+           System.out.println("Player was interrupted while drinking");
         }
     }
 }
