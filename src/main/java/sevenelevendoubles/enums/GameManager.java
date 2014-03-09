@@ -69,20 +69,25 @@ public class GameManager {
         while (iterator.hasNext()) {
             Player player = iterator.next();
             if (player.getNoOfDrinksFinished() >= max) {
+                System.out.println(new StringBuffer(player.getName()).append(" says: 'I've had too many.  I need to stop.'").toString());
                 iterator.remove();
             }
         }
     }
 
     public synchronized boolean simulatePlayerTurn(Outcome outcome, ExecutorService executorService) {
+
         if (getPlayersLeft().size() == 1) {
             System.out.println(getCurrentPlayer().getName() + " has won");
             return false;
         }
+        System.out.println(new StringBuffer("There are ").append(playersLeft.size()).append(" players").toString());
+        System.out.println(new StringBuffer("It is ").append(playersLeft.peek().getName()).append("'s turn").toString());
         if (outcome.isAWin()) {
             Player player = selectForDrinking();
             makePlayerDrink(player, executorService);
         } else {
+            //TODO: Add a while loop here
             if (!isAnyPlayerDrinking()) {
                 Player loser = playersLeft.poll();
                 playersLeft.offer(loser);
