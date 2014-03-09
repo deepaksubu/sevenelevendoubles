@@ -11,11 +11,10 @@ import java.util.InputMismatchException;
 public class Player {
 
     String name;
+
     private int noOfDrinksFinished;
     private int noOfDrinksDrinking;
     private int speedOfDrinking = 100;
-
-
     /**
      * Make sure that the player name is never empty and the speedOfDrinking is always positive
      * @param name
@@ -38,20 +37,25 @@ public class Player {
         return player;
     }
 
+
     public synchronized void startDrinking() {
         noOfDrinksDrinking ++;
     }
+
     public synchronized void endDrinking() {
         noOfDrinksDrinking--;
         noOfDrinksFinished++;
     }
-
     public synchronized int getSpeedOfDrinking() {
         return speedOfDrinking;
     }
 
     public synchronized int getNoOfDrinksFinished() {
         return noOfDrinksFinished;
+    }
+
+    public synchronized String getName() {
+        return name;
     }
 
     public synchronized int getNoOfDrinksDrinking() {

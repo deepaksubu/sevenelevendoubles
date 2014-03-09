@@ -2,7 +2,7 @@ Simulator
 SPEED
 MAX
 List<Player> initialListOfPlayers
-PlayerManager playerManager;
+PlayerManager gameManager;
 Dice;
 startGame
 simulateDiceRoll

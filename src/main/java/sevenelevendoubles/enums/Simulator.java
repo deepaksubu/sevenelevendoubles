@@ -3,6 +3,7 @@ package sevenelevendoubles.enums;
 import sevenelevendoubles.Player;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * User: deepak
@@ -16,7 +17,8 @@ public class Simulator {
     private static final String NAME_ALREADY_TAKEN = "Enter a different name as the provided one is already taken";
 
 
-    List<Player> initialPlayersList = new LinkedList<>();
+    private Queue<Player> initialPlayersList = new ConcurrentLinkedQueue<>();
+
     private int rollSpeed = 2;
 
     private static final String HELP_STRING = "This program simulates the 7-11-Doubles drinking game.\n" +
@@ -32,17 +34,12 @@ public class Simulator {
             "\tMAX [drinks]\tNumber of drinks before player.\n" +
             "\t\tdrops out. Default 5.\n" +
             "\tSTART\tStart the simulation";
-
     private static final String PAUSE_TIME = "Pause time between rolls is ";
+
     private static final String MAX_DRINK_MESSAGE = "Maximum number of drinks is ";
+
     private static final String MORE_PLAYERS_NEEDED = "At least 2 players required to start game";
-
     private int max = 5;
-
-    public Simulator() {
-        System.out.println(HELP_STRING);
-    }
-
     //TODO: Refactor to remove the nasty if elses
     public void waitForInput() {
         System.out.print("%%% ");
@@ -133,12 +130,35 @@ public class Simulator {
         }
     }
 
-    private void startSimulation() {
-        System.out.println("Simulation Started");
+    public void startSimulation() {
+        // start
+        // pick the current player as the first player in the list
+        // initalize the players left as the initial list of players
+
+        // currrent player throws dice
+          // if player wins
+                 // he picks a player to drink
+                 // pause until timer is done
+                 //rollAgainWithNoChangeInCurrentPlayer
+          // else
+                 // check if all players have finished drinking
+                // if yes
+                    //startAgainWithADifferentPlayer
+                // else
+                     //startAgainWithSamePlayer1
+    }
+
+    public GameManager initialize() {
+        GameManager gameManager = new GameManager(initialPlayersList);
+        return gameManager;
     }
 
     public static void main(String[] args) {
         Simulator simulator = new Simulator();
         simulator.waitForInput();
+    }
+
+    public void setInitialPlayersList(Queue<Player> initialPlayersList) {
+        this.initialPlayersList = initialPlayersList;
     }
 }
