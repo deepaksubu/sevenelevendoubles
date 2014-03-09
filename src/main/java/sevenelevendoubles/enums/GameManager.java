@@ -1,10 +1,12 @@
 package sevenelevendoubles.enums;
 
+import sevenelevendoubles.DrinkingTask;
 import sevenelevendoubles.Player;
 import sevenelevendoubles.service.Outcome;
 
 import java.util.Iterator;
 import java.util.Queue;
+import java.util.concurrent.ExecutorService;
 
 /**
  * User: deepak
@@ -26,8 +28,9 @@ public class GameManager {
         return playersLeft;
     }
 
-    public synchronized Player makePlayerDrink(Player player) {
-        return null;
+    public synchronized void makePlayerDrink(Player player, ExecutorService executorService) {
+        DrinkingTask drinkingTask = new DrinkingTask(player);
+        executorService.submit(drinkingTask);
     }
 
     public synchronized Player selectForDrinking() {
@@ -50,18 +53,42 @@ public class GameManager {
         throw new IllegalStateException("The program is not in a valid state");
     }
 
+    public boolean isAnyPlayerDrinking() {
+        Iterator<Player> playerIterator = playersLeft.iterator();
+        while (playerIterator.hasNext()) {
+            if (playerIterator.next().getNoOfDrinksDrinking() > 0) {
+               return true;
+            }
+        }
+        return false;
+    }
 
-    public synchronized void simulatePlayerTurn(Outcome outcome) {
+    public synchronized void removeDrunkPlayers(int max) {
+
+        Iterator<Player> iterator = playersLeft.iterator();
+        while (iterator.hasNext()) {
+            Player player = iterator.next();
+            if (player.getNoOfDrinksFinished() >= max) {
+                iterator.remove();
+            }
+        }
+    }
+
+    public synchronized boolean simulatePlayerTurn(Outcome outcome, ExecutorService executorService) {
         if (getPlayersLeft().size() == 1) {
-            System.out.println(getCurrentPlayer() + " has won");
+            System.out.println(getCurrentPlayer().getName() + " has won");
+            return false;
         }
         if (outcome.isAWin()) {
             Player player = selectForDrinking();
-            makePlayerDrink(player);
+            makePlayerDrink(player, executorService);
         } else {
-            Player loser = playersLeft.poll();
-            playersLeft.offer(loser);
+            if (!isAnyPlayerDrinking()) {
+                Player loser = playersLeft.poll();
+                playersLeft.offer(loser);
+            }
         }
+        return true;
     }
 
 }

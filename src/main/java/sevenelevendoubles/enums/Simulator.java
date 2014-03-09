@@ -1,9 +1,13 @@
 package sevenelevendoubles.enums;
 
 import sevenelevendoubles.Player;
+import sevenelevendoubles.service.Dice;
+import sevenelevendoubles.service.Outcome;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * User: deepak
@@ -18,8 +22,9 @@ public class Simulator {
 
 
     private Queue<Player> initialPlayersList = new ConcurrentLinkedQueue<>();
+    final ExecutorService executorService = Executors.newCachedThreadPool();
 
-    private int rollSpeed = 2;
+    private int rollSpeed = 2000;
 
     private static final String HELP_STRING = "This program simulates the 7-11-Doubles drinking game.\n" +
             "\n" +
@@ -131,6 +136,15 @@ public class Simulator {
     }
 
     public void startSimulation() {
+        GameManager gameManager = createGameManager();
+        while (gameManager.simulatePlayerTurn(new Outcome(Dice.roll(), Dice.roll()), executorService)) {
+            try {
+                Thread.sleep(rollSpeed);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            gameManager.removeDrunkPlayers(max);
+        }
         // start
         // pick the current player as the first player in the list
         // initalize the players left as the initial list of players
@@ -148,7 +162,7 @@ public class Simulator {
                      //startAgainWithSamePlayer1
     }
 
-    public GameManager initialize() {
+    public GameManager createGameManager() {
         GameManager gameManager = new GameManager(initialPlayersList);
         return gameManager;
     }

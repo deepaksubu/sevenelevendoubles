@@ -23,7 +23,7 @@ public class SimulatorTest {
         players.add(createPlayer("Bob", 4));
         players.add(createPlayer("Chris", 5));
         simulator.setInitialPlayersList(players);
-        GameManager gameManager = simulator.initialize();
+        GameManager gameManager = simulator.createGameManager();
         Assert.assertEquals(gameManager.getCurrentPlayer(), createPlayer("Alex", 3));
         Assert.assertEquals(gameManager.getPlayersLeft(), players);
     }

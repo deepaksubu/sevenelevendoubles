@@ -14,7 +14,7 @@ public class Player {
 
     private int noOfDrinksFinished;
     private int noOfDrinksDrinking;
-    private int speedOfDrinking = 100;
+    private int speedOfDrinking;
     /**
      * Make sure that the player name is never empty and the speedOfDrinking is always positive
      * @param name
