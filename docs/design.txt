@@ -3,7 +3,7 @@ Initial Design: happy path
 Client
 waits for user input =>
 add speed of dice rolls =>
-add max number of drinks =>
+add maxDrinks number of drinks =>
 add player with drinking time =>
 add one more player with drinking time =>
 add third player with drinking time =>

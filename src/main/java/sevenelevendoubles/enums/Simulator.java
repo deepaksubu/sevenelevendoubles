@@ -1,11 +1,9 @@
 package sevenelevendoubles.enums;
 
 import sevenelevendoubles.Player;
-import sevenelevendoubles.service.Dice;
 import sevenelevendoubles.service.Outcome;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,8 +19,9 @@ public class Simulator {
     private static final String NAME_ALREADY_TAKEN = "Enter a different name as the provided one is already taken";
 
 
-    private Queue<Player> initialPlayersList = new ConcurrentLinkedQueue<>();
+    private List<Player> initialPlayersList = new ArrayList<>();
     final ExecutorService executorService = Executors.newCachedThreadPool();
+    final Selector selector;
 
     private int rollSpeed = 2000;
 
@@ -45,6 +44,11 @@ public class Simulator {
 
     private static final String MORE_PLAYERS_NEEDED = "At least 2 players required to start game";
     private int max = 5;
+
+    public Simulator(Selector selector) {
+        this.selector = selector;
+    }
+
     //TODO: Refactor to remove the nasty if elses
     public void waitForInput() {
         System.out.print("%%% ");
@@ -73,6 +77,7 @@ public class Simulator {
             System.out.println(MORE_PLAYERS_NEEDED);
         } else {
             startSimulation();
+            System.exit(0);
         }
     }
 
@@ -89,7 +94,7 @@ public class Simulator {
     private void executeSpeedCommand(String command) {
         int speed = parseIntegerArgument(command);
         if (speed > 0) {
-            this.rollSpeed = speed;
+            this.rollSpeed = speed*1000;
             System.out.println(PAUSE_TIME + this.rollSpeed +" seconds");
         } else {
             System.out.println(INVALID_NUMBER_MESSAGE);
@@ -104,7 +109,7 @@ public class Simulator {
                 String name = commands[1].trim();
                 int speedOfDrinking = parseIntegerArgument(commands[2]);
                 if (speedOfDrinking > 0) {
-                    Player player = Player.createPlayer(name, speedOfDrinking);
+                    Player player = Player.createPlayer(name, speedOfDrinking*1000);
                     if (player != null) {
                         if (!initialPlayersList.contains(player)) {
                             initialPlayersList.add(player);
@@ -137,7 +142,7 @@ public class Simulator {
 
     public void startSimulation() {
         GameManager gameManager = createGameManager();
-        while (gameManager.simulatePlayerTurn(new Outcome(Dice.roll(), Dice.roll()), executorService)) {
+        while (gameManager.simulatePlayerTurn(new Outcome(selector.selectDiceRoll(), selector.selectDiceRoll()), executorService)) {
             try {
                 Thread.sleep(rollSpeed);
             } catch (InterruptedException e) {
@@ -145,34 +150,19 @@ public class Simulator {
             }
             gameManager.removeDrunkPlayers(max);
         }
-        // start
-        // pick the current player as the first player in the list
-        // initalize the players left as the initial list of players
-
-        // currrent player throws dice
-          // if player wins
-                 // he picks a player to drink
-                 // pause until timer is done
-                 //rollAgainWithNoChangeInCurrentPlayer
-          // else
-                 // check if all players have finished drinking
-                // if yes
-                    //startAgainWithADifferentPlayer
-                // else
-                     //startAgainWithSamePlayer1
     }
 
     public GameManager createGameManager() {
-        GameManager gameManager = new GameManager(initialPlayersList);
+        GameManager gameManager = new GameManager(initialPlayersList, max);
         return gameManager;
     }
 
     public static void main(String[] args) {
-        Simulator simulator = new Simulator();
+        Simulator simulator = new Simulator(new RandomizedSelector());
         simulator.waitForInput();
     }
 
-    public void setInitialPlayersList(Queue<Player> initialPlayersList) {
+    public void setInitialPlayersList(List<Player> initialPlayersList) {
         this.initialPlayersList = initialPlayersList;
     }
 }

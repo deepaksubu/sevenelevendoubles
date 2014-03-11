@@ -5,8 +5,8 @@ import org.junit.Test;
 import sevenelevendoubles.Player;
 import sevenelevendoubles.service.Outcome;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 
 import static sevenelevendoubles.Player.createPlayer;
@@ -23,7 +23,7 @@ public class GameManagerTest {
     public void testChoosePlayerForDrinking() throws Exception {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
         for (int i = 0; i < 100 ; i++) {
-            Player player = gameManager.selectForDrinking();
+            Player player = gameManager.selectForDrinking(new RandomizedSelector().selectPlayer(gameManager.getPlayersLeft().size())-1);
         }
     }
 
@@ -32,7 +32,7 @@ public class GameManagerTest {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
         Outcome doubles = new Outcome(2,2);
         gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool());
-        Assert.assertEquals(gameManager.getPlayersLeft().peek(), Player.createPlayer("Alex", 3));
+        Assert.assertEquals(gameManager.getPlayersLeft().get(0), Player.createPlayer("Alex", 3));
     }
 
     @Test
@@ -40,7 +40,7 @@ public class GameManagerTest {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
         Outcome doubles = new Outcome(2,3);
         gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool() );
-        Assert.assertEquals(gameManager.getPlayersLeft().peek(), Player.createPlayer("Bob", 4));
+        Assert.assertEquals(gameManager.getPlayersLeft().get(0), Player.createPlayer("Bob", 4));
     }
 
     @Test
@@ -55,24 +55,8 @@ public class GameManagerTest {
         Assert.assertTrue(gameManager.isAnyPlayerDrinking());
     }
 
-    @Test
-    public void testRemoveDrunkPlayers_SomeDrunkPlayers() {
-        GameManager gameManager = initGameManagerSomeDrunkPlayers();
-        int initSize = gameManager.getPlayersLeft().size();
-        gameManager.removeDrunkPlayers(MAX_DRINKS);
-        Assert.assertEquals(initSize - 3, gameManager.getPlayersLeft().size());
-    }
-
-    @Test
-    public void testRemoveDrunkPlayers_NoDrunkPlayers() {
-        GameManager gameManager = initGameManagerWithMostlySoberPlayer();
-        int initSize = gameManager.getPlayersLeft().size();
-        gameManager.removeDrunkPlayers(MAX_DRINKS);
-        Assert.assertEquals(gameManager.getPlayersLeft().size(), initSize);
-    }
-
     private GameManager initGameManagerWithMostlySoberPlayer() {
-        Queue<Player> players = new ConcurrentLinkedQueue<>();
+        List<Player> players = new CopyOnWriteArrayList<>();
         players.add(createPlayer("Alex", 3));
         players.add(createPlayer("Bob", 4));
         players.add(createPlayer("Chris", 5));
@@ -84,11 +68,11 @@ public class GameManagerTest {
         players.add(createPlayer("Ian", 5));
         players.add(createPlayer("Jack", 5));
         players.add(createPlayer("Kara", 5));
-        return new GameManager(players);
+        return new GameManager(players, MAX_DRINKS);
     }
 
     private GameManager initGameManagerSomeDrinkingPlayers() {
-        Queue<Player> players = new ConcurrentLinkedQueue<>();
+        List<Player> players = new CopyOnWriteArrayList<>();
         players.add(createDrinkingPlayer("Alex", 3));
         players.add(createPlayer("Bob", 4));
         players.add(createPlayer("Chris", 5));
@@ -100,23 +84,7 @@ public class GameManagerTest {
         players.add(createPlayer("Ian", 5));
         players.add(createDrinkingPlayer("Jack", 5));
         players.add(createPlayer("Kara", 5));
-        return new GameManager(players);
-    }
-
-    private GameManager initGameManagerSomeDrunkPlayers() {
-        Queue<Player> players = new ConcurrentLinkedQueue<>();
-        players.add(createDrunkgPlayer("Alex", 3));
-        players.add(createPlayer("Bob", 4));
-        players.add(createPlayer("Chris", 5));
-        players.add(createPlayer("Deepak", 6));
-        players.add(createPlayer("Eye", 3));
-        players.add(createDrunkgPlayer("Federer", 5));
-        players.add(createPlayer("Garry", 5));
-        players.add(createPlayer("Harry", 5));
-        players.add(createPlayer("Ian", 5));
-        players.add(createDrunkgPlayer("Jack", 5));
-        players.add(createPlayer("Kara", 5));
-        return new GameManager(players);
+        return new GameManager(players, MAX_DRINKS);
     }
 
 
@@ -126,7 +94,7 @@ public class GameManagerTest {
         return player;
     }
 
-    private Player createDrunkgPlayer(String name, int speedOfDrinking) {
+    private Player createDrunkPlayer(String name, int speedOfDrinking) {
         Player player = createPlayer(name, speedOfDrinking);
         for (int i = 0; i < MAX_DRINKS; i++) {
         player.startDrinking();

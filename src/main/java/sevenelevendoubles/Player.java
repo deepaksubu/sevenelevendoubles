@@ -1,9 +1,5 @@
 package sevenelevendoubles;
 
-import sevenelevendoubles.enums.Simulator;
-
-import java.util.InputMismatchException;
-
 /**
  * User: deepak
  * Date: 3/2/14
@@ -14,14 +10,15 @@ public class Player {
 
     private int noOfDrinksFinished;
     private int noOfDrinksDrinking;
-    private int speedOfDrinking;
+    private long speedOfDrinkingInMillis;
     /**
-     * Make sure that the player name is never empty and the speedOfDrinking is always positive
+     * Make sure that the player name is never empty and the speedOfDrinkingInMillis is always positive
+     *
      * @param name
      * @param speedOfDrinking
      * @return
      */
-    public static Player createPlayer(String name, int speedOfDrinking) {
+    public static Player createPlayer(String name, long speedOfDrinking) {
         Player player = new Player();
         if (name.isEmpty()) {
             return null;
@@ -32,7 +29,7 @@ public class Player {
         if (speedOfDrinking <= 0) {
             return null;
         } else {
-            player.speedOfDrinking = speedOfDrinking;
+            player.speedOfDrinkingInMillis = speedOfDrinking;
         }
         return player;
     }
@@ -46,8 +43,8 @@ public class Player {
         noOfDrinksDrinking--;
         noOfDrinksFinished++;
     }
-    public synchronized int getSpeedOfDrinking() {
-        return speedOfDrinking;
+    public long getSpeedOfDrinkingInMillis() {
+        return speedOfDrinkingInMillis;
     }
 
     public synchronized int getNoOfDrinksFinished() {
@@ -63,7 +60,7 @@ public class Player {
     }
 
     public String toJoinedGameString() {
-        return new StringBuilder(name).append(" ,").append("who can finish a drink in ").append(speedOfDrinking).append(" seconds, has joined the game").toString();
+        return new StringBuilder(name).append(" ,").append("who can finish a drink in ").append(speedOfDrinkingInMillis).append(" seconds, has joined the game").toString();
     }
 
     @Override
