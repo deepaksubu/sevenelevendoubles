@@ -34,6 +34,14 @@ public class Player {
         return player;
     }
 
+    public synchronized void printStatus() {
+        StringBuffer stringBuffer = new StringBuffer(name).append(" has had ").append(noOfDrinksFinished).append(" drinks");
+        if (noOfDrinksDrinking > 0) {
+            stringBuffer.append(" and is drinking ").append(noOfDrinksDrinking).append(" more");
+        }
+        System.out.println(stringBuffer.toString());
+    }
+
 
     public synchronized void startDrinking() {
         noOfDrinksDrinking ++;

@@ -64,11 +64,17 @@ public class GameManager {
 
     public boolean simulatePlayerTurn(Outcome outcome, ExecutorService executorService) {
         if (getPlayersLeft().size() == 1) {
-            System.out.println(playersLeft.get(0).getName() + " has won");
+            System.out.println(playersLeft.get(0).getName() + " is the winner");
             return false;
         }
         System.out.println(new StringBuffer("There are ").append(playersLeft.size()).append(" players").toString());
         System.out.println(new StringBuffer("It is ").append(playersLeft.get(0).getName()).append("'s turn").toString());
+        for (Player player: playersLeft) {
+            player.printStatus();
+        }
+        System.out.println("\n");
+
+        System.out.println(new StringBuffer(playersLeft.get(0).getName()).append(" rolled a ").append(outcome.getMessage()).toString());
         if (outcome.isAWin()) {
             Player player = selectForDrinking(new RandomizedSelector().selectPlayer(playersLeft.size() - 1));
             makePlayerDrink(player, executorService);
