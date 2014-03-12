@@ -1,4 +1,4 @@
-package sevenelevendoubles.service;
+package sevenelevendoubles.core;
 
 /**
  * Outcome of the dice throw. It has two fields

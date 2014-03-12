@@ -1,15 +1,14 @@
-package sevenelevendoubles.enums;
+package sevenelevendoubles.core;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import sevenelevendoubles.Player;
-import sevenelevendoubles.service.Outcome;
+import sevenelevendoubles.entity.Player;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 
-import static sevenelevendoubles.Player.createPlayer;
+import static sevenelevendoubles.entity.Player.createPlayer;
 
 /**
  * User: deepak
@@ -23,7 +22,7 @@ public class GameManagerTest {
     public void testChoosePlayerForDrinking() throws Exception {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
         for (int i = 0; i < 100 ; i++) {
-            Player player = gameManager.selectForDrinking(new RandomizedSelector().selectPlayer(gameManager.getPlayersLeft().size())-1);
+            Player player = gameManager.selectForDrinking(new RandomizedSelector().selectPlayer(gameManager.getPlayers().size())-1);
         }
     }
 
@@ -32,7 +31,7 @@ public class GameManagerTest {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
         Outcome doubles = new Outcome(2,2);
         gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool());
-        Assert.assertEquals(gameManager.getPlayersLeft().get(0), Player.createPlayer("Alex", 3));
+        Assert.assertEquals(gameManager.getPlayers().get(0), Player.createPlayer("Alex", 3));
     }
 
     @Test
@@ -40,7 +39,7 @@ public class GameManagerTest {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
         Outcome doubles = new Outcome(2,3);
         gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool() );
-        Assert.assertEquals(gameManager.getPlayersLeft().get(0), Player.createPlayer("Bob", 4));
+        Assert.assertEquals(gameManager.getPlayers().get(0), Player.createPlayer("Bob", 4));
     }
 
     @Test

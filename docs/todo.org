@@ -1,0 +1,7 @@
+** TODO Add a bash script to run the program
+** TODO Add a readme on how to run the program
+** DONE Move the classes in the correct packages
+** TODO Do a simple load test
+** TODO Add documentation for each method as required
+** TODO Add more unit tests
+** TODO Look at total drinks instead of finished drinks

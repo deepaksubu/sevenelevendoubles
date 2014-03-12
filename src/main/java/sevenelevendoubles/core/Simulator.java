@@ -1,13 +1,16 @@
-package sevenelevendoubles.enums;
+package sevenelevendoubles.core;
 
-import sevenelevendoubles.Player;
-import sevenelevendoubles.service.Outcome;
+import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.enums.Command;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * This gets the inputs from the user and does the game simulation.
+ * This is a singleton class which talks to the gameManager singleton for doing its activity.
+ *
  * User: deepak
  * Date: 3/8/14
  */
@@ -47,29 +50,35 @@ public class Simulator {
 
     public Simulator(Selector selector) {
         this.selector = selector;
+        System.out.println(HELP_STRING);
     }
 
-    //TODO: Refactor to remove the nasty if elses
-    public void waitForInput() {
-        System.out.print("%%% ");
+    public void waitForUserInput() {
         Scanner scanner = new Scanner(System.in);
-        String commandLine = scanner.nextLine();
-        String commands[] = commandLine.split(" ");
-        String commandString = commands[0].trim();
-        if (commandString.equalsIgnoreCase(Command.HELP.toString())) {
-            System.out.println(HELP_STRING);
-        } else if (commandString.equalsIgnoreCase(Command.ADD.toString())) {
-            executeAddCommand(commands);
-        } else if (commandString.equalsIgnoreCase(Command.SPEED.toString())) {
-            executeSpeedCommand(commands[1]);
-        } else if (commandString.equalsIgnoreCase(Command.MAX.toString())) {
-            executeMaxDrinksCommand(commands[1]);
-        } else if (commandString.equalsIgnoreCase(Command.START.toString())) {
-            executeStartCommand();
-        } else {
-            System.out.println(HELP_STRING);
+        try {
+            System.out.print("=>");
+            String commandLine = scanner.nextLine();
+            String commands[] = commandLine.split(" ");
+            String commandString = commands[0].trim();
+            if (commandString.equalsIgnoreCase(Command.HELP.toString())) {
+                System.out.println(HELP_STRING);
+            } else if (commandString.equalsIgnoreCase(Command.ADD.toString())) {
+                executeAddCommand(commands);
+            } else if (commandString.equalsIgnoreCase(Command.SPEED.toString())) {
+                executeSpeedCommand(commands[1]);
+            } else if (commandString.equalsIgnoreCase(Command.MAX.toString())) {
+                executeMaxDrinksCommand(commands[1]);
+            } else if (commandString.equalsIgnoreCase(Command.START.toString())) {
+                executeStartCommand();
+            } else {
+                System.out.println(HELP_STRING);
+            }
+
+            waitForUserInput();
+        } finally {
+            scanner.close();
         }
-        waitForInput();
+
     }
 
     private void executeStartCommand() {
@@ -95,7 +104,7 @@ public class Simulator {
         int speed = parseIntegerArgument(command);
         if (speed > 0) {
             this.rollSpeed = speed*1000;
-            System.out.println(PAUSE_TIME + this.rollSpeed +" seconds");
+            System.out.println(PAUSE_TIME + speed +" seconds");
         } else {
             System.out.println(INVALID_NUMBER_MESSAGE);
         }
@@ -148,7 +157,6 @@ public class Simulator {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            gameManager.removeDrunkPlayers(max);
         }
     }
 
@@ -159,7 +167,7 @@ public class Simulator {
 
     public static void main(String[] args) {
         Simulator simulator = new Simulator(new RandomizedSelector());
-        simulator.waitForInput();
+        simulator.waitForUserInput();
     }
 
     public void setInitialPlayersList(List<Player> initialPlayersList) {

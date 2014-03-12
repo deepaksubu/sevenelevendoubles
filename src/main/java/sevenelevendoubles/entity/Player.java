@@ -1,6 +1,15 @@
-package sevenelevendoubles;
+package sevenelevendoubles.entity;
 
 /**
+ * The central entity for the seven eleven game.
+ * Each player should always be instantiated with a name and speedOfDrinking.
+ * A player is identified by his or her name.
+ *
+ * At any point of time, the player can be in two states, drinking or not drinking.
+ * If a player is in drinking state, then the noOfDrinksDrinking always has to be greater than zero.
+ *
+ * noOfDrinksFinished and noOfDrinksDrinking which are self explanatory.
+ *
  * User: deepak
  * Date: 3/2/14
  */
@@ -11,8 +20,9 @@ public class Player {
     private int noOfDrinksFinished;
     private int noOfDrinksDrinking;
     private long speedOfDrinkingInMillis;
+
     /**
-     * Make sure that the player name is never empty and the speedOfDrinkingInMillis is always positive
+     * Make sure that the player name is never empty and the speedOfDrinkingInMillis is always positive.
      *
      * @param name
      * @param speedOfDrinking
@@ -44,6 +54,9 @@ public class Player {
 
 
     public synchronized void startDrinking() {
+        if (noOfDrinksDrinking < 0) {
+            throw new IllegalStateException(new StringBuffer(name).append(": No of drinks should never be negative").toString());
+        }
         noOfDrinksDrinking ++;
     }
 

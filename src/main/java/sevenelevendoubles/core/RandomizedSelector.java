@@ -1,4 +1,4 @@
-package sevenelevendoubles.enums;
+package sevenelevendoubles.core;
 
 /**
 * User: deepak

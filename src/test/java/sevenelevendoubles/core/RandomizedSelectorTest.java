@@ -1,9 +1,7 @@
-package sevenelevendoubles.service;
+package sevenelevendoubles.core;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import sevenelevendoubles.enums.RandomizedSelector;
-import sevenelevendoubles.enums.Selector;
 
 /**
  * User: deepak

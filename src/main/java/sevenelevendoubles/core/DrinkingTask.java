@@ -1,9 +1,9 @@
-package sevenelevendoubles;
+package sevenelevendoubles.core;
 
-import sevenelevendoubles.enums.GameManager;
+import sevenelevendoubles.entity.Player;
 
 /**
- * Keep track of a given player's state while drinking a single drink
+ * The task of drinking a single drink with a consequence that if the no of drinks are greater than the
  * User: deepak
  */
 public class DrinkingTask implements Runnable {
@@ -18,11 +18,11 @@ public class DrinkingTask implements Runnable {
 
     @Override
     public void run() {
-        player.startDrinking();
         try {
+            player.startDrinking();
             Thread.sleep(player.getSpeedOfDrinkingInMillis());
             player.endDrinking();
-            if (player.getNoOfDrinksFinished() >= gameManager.getMaxDrinks()) {
+            if (player.getNoOfDrinksFinished() == gameManager.getMaxDrinks()) {
                 System.out.println(new StringBuffer(player.getName()).append(" says: 'I've had too many.  I need to stop.'").toString());
                 gameManager.removePlayer(player);
             }

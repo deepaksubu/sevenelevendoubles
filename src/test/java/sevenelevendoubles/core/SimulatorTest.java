@@ -1,13 +1,13 @@
-package sevenelevendoubles.enums;
+package sevenelevendoubles.core;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import sevenelevendoubles.Player;
+import sevenelevendoubles.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static sevenelevendoubles.Player.createPlayer;
+import static sevenelevendoubles.entity.Player.createPlayer;
 
 /**
  * User: deepak
@@ -24,8 +24,8 @@ public class SimulatorTest {
         players.add(createPlayer("Chris", 5));
         simulator.setInitialPlayersList(players);
         GameManager gameManager = simulator.createGameManager();
-        Assert.assertEquals(gameManager.getPlayersLeft().get(0), createPlayer("Alex", 3));
-        Assert.assertEquals(gameManager.getPlayersLeft(), players);
+        Assert.assertEquals(gameManager.getPlayers().get(0), createPlayer("Alex", 3));
+        Assert.assertEquals(gameManager.getPlayers(), players);
     }
 
 }
