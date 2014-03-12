@@ -68,8 +68,8 @@ public class Player {
         return speedOfDrinkingInMillis;
     }
 
-    public synchronized int getNoOfDrinksFinished() {
-        return noOfDrinksFinished;
+    public synchronized int getTotalDrinks() {
+        return (noOfDrinksDrinking + noOfDrinksFinished);
     }
 
     public synchronized String getName() {
@@ -81,7 +81,7 @@ public class Player {
     }
 
     public String toJoinedGameString() {
-        return new StringBuilder(name).append(" ,").append("who can finish a drink in ").append(speedOfDrinkingInMillis).append(" seconds, has joined the game").toString();
+        return new StringBuilder(name).append(" ,").append("who can finish a drink in ").append(speedOfDrinkingInMillis/1000).append(" seconds, has joined the game").toString();
     }
 
     @Override

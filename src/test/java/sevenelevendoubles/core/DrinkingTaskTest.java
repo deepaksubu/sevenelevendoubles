@@ -102,8 +102,8 @@ public class DrinkingTaskTest {
 
     private void validatePlayerDrinkingState(Player player, int expectedNoOfDrinksDrinking, int exectedNoOfDrinksFinished, int maxDrinksAllowed) {
         Assert.assertEquals(expectedNoOfDrinksDrinking, player.getNoOfDrinksDrinking());
-        Assert.assertEquals(exectedNoOfDrinksFinished, player.getNoOfDrinksFinished());
-        Assert.assertTrue(player.getNoOfDrinksDrinking() + player.getNoOfDrinksFinished() <= maxDrinksAllowed);
+        Assert.assertEquals(exectedNoOfDrinksFinished, player.getTotalDrinks());
+        Assert.assertTrue(player.getNoOfDrinksDrinking() + player.getTotalDrinks() <= maxDrinksAllowed);
     }
 
     private GameManager createGameManager(int maxDrinks) {

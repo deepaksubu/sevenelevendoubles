@@ -22,7 +22,7 @@ public class DrinkingTask implements Runnable {
             player.startDrinking();
             Thread.sleep(player.getSpeedOfDrinkingInMillis());
             player.endDrinking();
-            if (player.getNoOfDrinksFinished() == gameManager.getMaxDrinks()) {
+            if (player.getTotalDrinks() == gameManager.getMaxDrinks()) {
                 System.out.println(new StringBuffer(player.getName()).append(" says: 'I've had too many.  I need to stop.'").toString());
                 gameManager.removePlayer(player);
             }
