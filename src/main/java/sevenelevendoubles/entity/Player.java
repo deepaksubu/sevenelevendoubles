@@ -28,20 +28,18 @@ public class Player {
      * @param speedOfDrinking
      * @return
      */
-    public static Player createPlayer(String name, long speedOfDrinking) {
-        Player player = new Player();
+    public Player(String name, long speedOfDrinking) {
         if (name.isEmpty()) {
-            return null;
+            throw new IllegalArgumentException("Player name should never be empty");
         } else {
-            player.name = name;
+            this.name = name;
         }
 
         if (speedOfDrinking <= 0) {
-            return null;
+            throw new IllegalArgumentException("Speed of drinking should never be negative");
         } else {
-            player.speedOfDrinkingInMillis = speedOfDrinking;
+            this.speedOfDrinkingInMillis = speedOfDrinking;
         }
-        return player;
     }
 
     public synchronized void printStatus() {
@@ -53,16 +51,29 @@ public class Player {
     }
 
 
-    public synchronized void startDrinking() {
-        if (noOfDrinksDrinking < 0) {
-            throw new IllegalStateException(new StringBuffer(name).append(": No of drinks should never be negative").toString());
+    public synchronized void startDrinking(int maxDrinks) {
+        if (noOfDrinksFinished + noOfDrinksDrinking < maxDrinks) {
+            noOfDrinksDrinking ++;
         }
-        noOfDrinksDrinking ++;
+
+        if (noOfDrinksFinished + noOfDrinksDrinking > maxDrinks) {
+            throw new IllegalStateException(new StringBuffer(name).append(": No of drinks should never be more than").append(maxDrinks).toString());
+        }
     }
 
-    public synchronized void endDrinking() {
-        noOfDrinksDrinking--;
-        noOfDrinksFinished++;
+    public synchronized void endDrinking(int maxDrinks) {
+        if (noOfDrinksDrinking < 1) {
+            throw new IllegalStateException(new StringBuffer(name).append(": No of drinks drinking should never be negative. Player should be drinking at least one drink to end drinking").toString());
+        }
+
+        if (noOfDrinksFinished < maxDrinks) {
+            noOfDrinksDrinking--;
+            noOfDrinksFinished++;
+        }
+
+        if (noOfDrinksFinished > maxDrinks) {
+            throw new IllegalStateException(new StringBuffer(name).append(": No of drinks finished should never be more than").append(maxDrinks).toString());
+        }
     }
     public long getSpeedOfDrinkingInMillis() {
         return speedOfDrinkingInMillis;

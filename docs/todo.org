@@ -5,3 +5,6 @@
 ** TODO Add documentation for each method as required
 ** TODO Add more unit tests
 ** TODO Look at total drinks instead of finished drinks
+** Think of the case when there are only two players and one maxDrinks drink, if anyone of them roles a winner then the simulator should wait for the other person to stop drinking and then declare the winner
+** No player should drink more than the maximum number of drinks. If he is drinking the last one he should be allowed to finish.
+** deepak says: 'I've had too many.  I need to stop.' This messaging should not appear immediately after the person is asked to drink. it should appear only after he person has finished drinking his last drinking

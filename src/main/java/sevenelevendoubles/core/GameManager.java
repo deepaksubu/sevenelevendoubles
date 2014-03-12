@@ -1,6 +1,7 @@
 package sevenelevendoubles.core;
 
 import sevenelevendoubles.entity.Player;
+import sun.plugin.dom.exception.InvalidStateException;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,6 +35,13 @@ public class GameManager {
     }
 
     public void removePlayer(Player player) {
+        if (players.size() > 2) {
+            System.out.println(new StringBuffer(player.getName()).append(" says: 'I've had too many.  I need to stop.'").toString());
+        } else if (players.size() == 2) {
+            System.out.println("Waiting for " + player.getName() +" to finish");
+        } else {
+            throw new InvalidStateException("Game simulation is in an invalid state:" + player.getName());
+        }
         this.getPlayers().remove(player);
     }
 
@@ -59,7 +67,7 @@ public class GameManager {
         return false;
     }
 
-    public boolean simulatePlayerTurn(Outcome outcome, ExecutorService executorService) {
+    public boolean simulatePlayerTurn(DiceThrowResult diceThrowResult, ExecutorService executorService) {
         if (getPlayers().size() == 1) {
             System.out.println(players.get(0).getName() + " is the winner");
             return false;
@@ -71,8 +79,8 @@ public class GameManager {
         }
         System.out.println("\n");
 
-        System.out.println(new StringBuffer(players.get(0).getName()).append(" rolled a ").append(outcome.getMessage()).toString());
-        if (outcome.isAWin()) {
+        System.out.println(new StringBuffer(players.get(0).getName()).append(" rolled a ").append(diceThrowResult.getMessage()).toString());
+        if (diceThrowResult.isAWin()) {
             Player player = selectForDrinking(new RandomizedSelector().selectPlayer(players.size() - 1));
             makePlayerDrink(player, executorService);
         } else {

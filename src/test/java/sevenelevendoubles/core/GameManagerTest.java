@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 
-import static sevenelevendoubles.entity.Player.createPlayer;
-
 /**
  * User: deepak
  * Date: 3/8/14
@@ -29,17 +27,17 @@ public class GameManagerTest {
     @Test
     public void testSimulatePlayerTurn_WinningThrow() {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
-        Outcome doubles = new Outcome(2,2);
+        DiceThrowResult doubles = new DiceThrowResult(2,2);
         gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool());
-        Assert.assertEquals(gameManager.getPlayers().get(0), Player.createPlayer("Alex", 3));
+        Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Alex", 3));
     }
 
     @Test
     public void testSimulatePlayerTurn_LoosingThrow() {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
-        Outcome doubles = new Outcome(2,3);
+        DiceThrowResult doubles = new DiceThrowResult(2,3);
         gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool() );
-        Assert.assertEquals(gameManager.getPlayers().get(0), Player.createPlayer("Bob", 4));
+        Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Bob", 4));
     }
 
     @Test
@@ -56,49 +54,40 @@ public class GameManagerTest {
 
     private GameManager initGameManagerWithMostlySoberPlayer() {
         List<Player> players = new CopyOnWriteArrayList<>();
-        players.add(createPlayer("Alex", 3));
-        players.add(createPlayer("Bob", 4));
-        players.add(createPlayer("Chris", 5));
-        players.add(createPlayer("Deepak", 6));
-        players.add(createPlayer("Eye", 3));
-        players.add(createPlayer("Federer", 5));
-        players.add(createPlayer("Garry", 5));
-        players.add(createPlayer("Harry", 5));
-        players.add(createPlayer("Ian", 5));
-        players.add(createPlayer("Jack", 5));
-        players.add(createPlayer("Kara", 5));
+        players.add(new Player("Alex", 3));
+        players.add(new Player("Bob", 4));
+        players.add(new Player("Chris", 5));
+        players.add(new Player("Deepak", 6));
+        players.add(new Player("Eye", 3));
+        players.add(new Player("Federer", 5));
+        players.add(new Player("Garry", 5));
+        players.add(new Player("Harry", 5));
+        players.add(new Player("Ian", 5));
+        players.add(new Player("Jack", 5));
+        players.add(new Player("Kara", 5));
         return new GameManager(players, MAX_DRINKS);
     }
 
     private GameManager initGameManagerSomeDrinkingPlayers() {
         List<Player> players = new CopyOnWriteArrayList<>();
         players.add(createDrinkingPlayer("Alex", 3));
-        players.add(createPlayer("Bob", 4));
-        players.add(createPlayer("Chris", 5));
-        players.add(createPlayer("Deepak", 6));
-        players.add(createPlayer("Eye", 3));
+        players.add(new Player("Bob", 4));
+        players.add(new Player("Chris", 5));
+        players.add(new Player("Deepak", 6));
+        players.add(new Player("Eye", 3));
         players.add(createDrinkingPlayer("Federer", 5));
-        players.add(createPlayer("Garry", 5));
-        players.add(createPlayer("Harry", 5));
-        players.add(createPlayer("Ian", 5));
+        players.add(new Player("Garry", 5));
+        players.add(new Player("Harry", 5));
+        players.add(new Player("Ian", 5));
         players.add(createDrinkingPlayer("Jack", 5));
-        players.add(createPlayer("Kara", 5));
+        players.add(new Player("Kara", 5));
         return new GameManager(players, MAX_DRINKS);
     }
 
 
     private Player createDrinkingPlayer(String name, int speedOfDrinking) {
-        Player player = createPlayer(name, speedOfDrinking);
-        player.startDrinking();
-        return player;
-    }
-
-    private Player createDrunkPlayer(String name, int speedOfDrinking) {
-        Player player = createPlayer(name, speedOfDrinking);
-        for (int i = 0; i < MAX_DRINKS; i++) {
-        player.startDrinking();
-        player.endDrinking();
-        }
+        Player player = new Player(name, speedOfDrinking);
+        player.startDrinking(MAX_DRINKS);
         return player;
     }
 

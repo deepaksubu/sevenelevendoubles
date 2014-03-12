@@ -19,12 +19,13 @@ public class DrinkingTask implements Runnable {
     @Override
     public void run() {
         try {
-            player.startDrinking();
-            Thread.sleep(player.getSpeedOfDrinkingInMillis());
-            player.endDrinking();
+            player.startDrinking(gameManager.getMaxDrinks());
             if (player.getTotalDrinks() == gameManager.getMaxDrinks()) {
-                System.out.println(new StringBuffer(player.getName()).append(" says: 'I've had too many.  I need to stop.'").toString());
+                Thread.sleep(player.getSpeedOfDrinkingInMillis());
                 gameManager.removePlayer(player);
+            } else {
+                Thread.sleep(player.getSpeedOfDrinkingInMillis());
+                player.endDrinking(gameManager.getMaxDrinks());
             }
         } catch (InterruptedException e) {
             System.out.println("Player was interrupted while drinking");
