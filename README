@@ -1,1 +1,5 @@
-Please run
+Requirements: Apache Maven 3
+Please run the following commands on your machine to start the simulation
+
+mvn clean install
+mvn -q exec:java -Dexec.mainClass="sevenelevendoubles.core.Simulator"
