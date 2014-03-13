@@ -27,7 +27,7 @@ public class GameManagerTest {
     @Test
     public void testSimulatePlayerTurn_WinningThrow() {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
-        DiceThrowResult doubles = new DiceThrowResult(2,2);
+        DiceRollOutput doubles = new DiceRollOutput(2,2);
         gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool());
         Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Alex", 3));
     }
@@ -35,7 +35,7 @@ public class GameManagerTest {
     @Test
     public void testSimulatePlayerTurn_LoosingThrow() {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
-        DiceThrowResult doubles = new DiceThrowResult(2,3);
+        DiceRollOutput doubles = new DiceRollOutput(2,3);
         gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool() );
         Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Bob", 4));
     }

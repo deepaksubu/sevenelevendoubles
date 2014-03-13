@@ -38,7 +38,8 @@ public class SimulatorTest {
             simulator.setInitialPlayersList(createInitialPlayerList());
             simulator.setMaxDrinks(1);
             simulator.setRollSpeed(10);
-            simulator.startSimulation();
+            Player player = simulator.startSimulation();
+            Assert.assertEquals(player.getName(), "Alex");
         }
     }
 

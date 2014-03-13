@@ -1,7 +1,7 @@
 package sevenelevendoubles.core;
 
 import sevenelevendoubles.entity.Player;
-import sun.plugin.dom.exception.InvalidStateException;
+import java.lang.IllegalStateException;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,28 +34,31 @@ public class GameManager {
         return players;
     }
 
-    public void removePlayer(Player player) {
+    public synchronized void removePlayer(Player player) {
         if (players.size() > 2) {
             System.out.println(new StringBuffer(player.getName()).append(" says: 'I've had too many.  I need to stop.'").toString());
         } else if (players.size() == 2) {
             System.out.println("Waiting for " + player.getName() +" to finish");
         } else {
-            throw new InvalidStateException("Game simulation is in an invalid state:" + player.getName());
+            throw new IllegalStateException("Game simulation is in invalid state for player: " + player.getName());
         }
         this.getPlayers().remove(player);
     }
 
     public void makePlayerDrink(Player player, ExecutorService executorService) {
-        DrinkingTask drinkingTask = new DrinkingTask(player, this);
-        executorService.execute(drinkingTask);
+        if (player != null) {
+            DrinkingTask drinkingTask = new DrinkingTask(player, this);
+            executorService.execute(drinkingTask);
+        }
     }
 
     public Player selectForDrinking(int selectedPlayerIndex) {
-        assert this.players.size() > 1: "The number of players should be more than 1";
-        Player choosenPlayer = players.get(selectedPlayerIndex);
-        System.out.println(new StringBuffer(players.get(0).getName()).append(" says: '").append(choosenPlayer.getName()).append(", drink!'").toString());
-        return choosenPlayer;
-
+        if (players.size() > 1) {
+            Player choosenPlayer = players.get(selectedPlayerIndex);
+            System.out.println(new StringBuffer(players.get(0).getName()).append(" says: '").append(choosenPlayer.getName()).append(", drink!'").toString());
+            return choosenPlayer;
+        }
+        return null;
     }
 
     public boolean isAnyPlayerDrinking() {
@@ -67,10 +70,10 @@ public class GameManager {
         return false;
     }
 
-    public boolean simulatePlayerTurn(DiceThrowResult diceThrowResult, ExecutorService executorService) {
+    public Result simulatePlayerTurn(DiceRollOutput diceRollOutput, ExecutorService executorService) {
         if (getPlayers().size() == 1) {
             System.out.println(players.get(0).getName() + " is the winner");
-            return false;
+            return new Result(players.get(0), true);
         }
         System.out.println(new StringBuffer("There are ").append(players.size()).append(" players").toString());
         System.out.println(new StringBuffer("It is ").append(players.get(0).getName()).append("'s turn").toString());
@@ -79,8 +82,8 @@ public class GameManager {
         }
         System.out.println("\n");
 
-        System.out.println(new StringBuffer(players.get(0).getName()).append(" rolled a ").append(diceThrowResult.getMessage()).toString());
-        if (diceThrowResult.isAWin()) {
+        System.out.println(new StringBuffer(players.get(0).getName()).append(" rolled a ").append(diceRollOutput.getMessage()).toString());
+        if (diceRollOutput.isAWin()) {
             Player player = selectForDrinking(new RandomizedSelector().selectPlayer(players.size() - 1));
             makePlayerDrink(player, executorService);
         } else {
@@ -89,7 +92,7 @@ public class GameManager {
                 players.add(loser);
             }
         }
-        return true;
+        return new Result(players.get(0), false);
     }
 
     public int getMaxDrinks() {

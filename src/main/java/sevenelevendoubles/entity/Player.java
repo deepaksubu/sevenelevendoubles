@@ -1,5 +1,8 @@
 package sevenelevendoubles.entity;
 
+import sevenelevendoubles.core.DrinkingTask;
+import sevenelevendoubles.core.GameManager;
+
 /**
  * The central entity for the seven eleven game.
  * Each player should always be instantiated with a name and speedOfDrinking.
@@ -83,6 +86,10 @@ public class Player {
         return (noOfDrinksDrinking + noOfDrinksFinished);
     }
 
+    public synchronized int maxDrinksAllowedToBeFinished() {
+        return (noOfDrinksFinished + 1);
+    }
+
     public synchronized String getName() {
         return name;
     }
@@ -110,5 +117,15 @@ public class Player {
     @Override
     public int hashCode() {
         return name.hashCode();
+    }
+
+    public synchronized void drink(GameManager gameManager) throws InterruptedException {
+        int maxDrinks1 = gameManager.getMaxDrinks();
+        this.startDrinking(maxDrinks1);
+        Thread.sleep(getSpeedOfDrinkingInMillis());
+        endDrinking(maxDrinks1);
+        if (getTotalDrinks() == maxDrinks1) {
+            gameManager.removePlayer(this);
+        }
     }
 }

@@ -60,9 +60,8 @@ public class DrinkingTaskTest {
         executorService.submit(alexDrink);
         Thread.sleep(10);
         validatePlayerDrinkingState(alex, 3, 5, 5);
-        Thread.sleep(100);
+        Thread.sleep(200);
         validatePlayerDrinkingState(alex, 0, 5, 5);
-        Thread.sleep(100);
         Assert.assertEquals(4, gameManager.getPlayers().size());
     }
 
@@ -76,19 +75,19 @@ public class DrinkingTaskTest {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         executorService.submit(alexDrink);
-        Thread.sleep(20);
+        Thread.sleep(200);
         Assert.assertEquals(4, gameManager.getPlayers().size());
 
         executorService.submit(bobDrink);
-        Thread.sleep(20);
+        Thread.sleep(300);
         Assert.assertEquals(3, gameManager.getPlayers().size());
 
         executorService.submit(chrisDrink);
-        Thread.sleep(20);
+        Thread.sleep(300);
         Assert.assertEquals(2, gameManager.getPlayers().size());
 
         executorService.submit(damienDrink);
-        Thread.sleep(20);
+        Thread.sleep(300);
         Assert.assertEquals(1, gameManager.getPlayers().size());
     }
 

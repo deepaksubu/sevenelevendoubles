@@ -80,15 +80,18 @@ public class Simulator {
         return start;
     }
 
-    public void startSimulation() {
+    public Player startSimulation() {
         GameManager gameManager = createGameManager();
-        while (gameManager.simulatePlayerTurn(new DiceThrowResult(selector.selectDiceRoll(), selector.selectDiceRoll()), executorService)) {
+        Result result = gameManager.simulatePlayerTurn(new DiceRollOutput(selector.selectDiceRoll(), selector.selectDiceRoll()), executorService);
+        while (!result.isGameFinished()) {
             try {
                 Thread.sleep(rollSpeed);
+                result = gameManager.simulatePlayerTurn(new DiceRollOutput(selector.selectDiceRoll(), selector.selectDiceRoll()), executorService);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+        return result.getPlayer();
     }
 
     public GameManager createGameManager() {
