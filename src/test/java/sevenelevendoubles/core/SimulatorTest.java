@@ -33,7 +33,7 @@ public class SimulatorTest {
 
     @Test
     public void testStartSimulation() throws Exception {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             Simulator simulator = new Simulator(new DeterministicSelector(), new DummyCommandExecutor());
             simulator.setInitialPlayersList(createInitialPlayerList());
             simulator.setMaxDrinks(1);

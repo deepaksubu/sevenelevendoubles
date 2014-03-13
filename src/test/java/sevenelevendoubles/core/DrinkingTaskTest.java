@@ -58,7 +58,7 @@ public class DrinkingTaskTest {
         executorService.submit(alexDrink);
         executorService.submit(alexDrink);
         executorService.submit(alexDrink);
-        Thread.sleep(10);
+        Thread.sleep(110);
         validatePlayerDrinkingState(alex, 3, 5, 5);
         Thread.sleep(200);
         validatePlayerDrinkingState(alex, 0, 5, 5);

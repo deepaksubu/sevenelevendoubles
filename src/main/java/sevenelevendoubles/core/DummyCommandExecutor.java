@@ -9,6 +9,11 @@ import java.util.List;
  * Date: 3/12/14
  */
 public class DummyCommandExecutor implements CommandExecutor {
+
+    public DummyCommandExecutor() {
+        System.out.println("Start New Round");
+    }
+
     @Override
     public boolean executeStartCommand(List<Player> players) {
         return false;

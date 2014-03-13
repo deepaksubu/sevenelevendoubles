@@ -65,8 +65,8 @@ public class Player {
     }
 
     public synchronized void endDrinking(int maxDrinks) {
-        if (noOfDrinksDrinking < 1) {
-            throw new IllegalStateException(new StringBuffer(name).append(": No of drinks drinking should never be negative. Player should be drinking at least one drink to end drinking").toString());
+        if (noOfDrinksDrinking < 0) {
+            throw new IllegalStateException(new StringBuffer(name).append("No of drinks drinking should never be negative").toString());
         }
 
         if (noOfDrinksFinished < maxDrinks) {
