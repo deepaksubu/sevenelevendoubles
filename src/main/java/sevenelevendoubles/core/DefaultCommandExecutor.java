@@ -6,6 +6,10 @@ import java.util.List;
 
 public class DefaultCommandExecutor implements CommandExecutor {
 
+    public DefaultCommandExecutor() {
+        System.out.println(HELP_COMMAND);
+    }
+
     @Override
     public boolean executeStartCommand(List<Player> players) {
         if (players.size() < 2) {

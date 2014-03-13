@@ -36,7 +36,6 @@ public class Simulator {
     public Simulator(Selector selector, CommandExecutor commandExecutor) {
         this.selector = selector;
         this.commandExecutor = commandExecutor;
-        System.out.println(GameMessages.HELP_STRING);
     }
 
     public void waitForUserInput() {

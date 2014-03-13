@@ -2,6 +2,7 @@ package sevenelevendoubles.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,6 +26,10 @@ public class DeterministicSelector implements Selector {
         rolls.add(3);
     }
 
+    private static Iterator<Integer> rollIterator = rolls.iterator();
+
+    int i = 0;
+
     @Override
     public int selectPlayer(int N) {
         return N-1;
@@ -32,10 +37,12 @@ public class DeterministicSelector implements Selector {
 
     @Override
     public int selectDiceRoll() {
-        if (rolls.iterator().hasNext()) {
-            return rolls.iterator().next();
+        if (rollIterator.hasNext()) {
+            return rollIterator.next();
         } else {
-            throw new IndexOutOfBoundsException("Please add more rolls");
+            rollIterator = rolls.iterator();
+            System.out.println("Restarting the iterator");
+            return rollIterator.next();
         }
     }
 }

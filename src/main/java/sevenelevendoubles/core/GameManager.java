@@ -34,17 +34,6 @@ public class GameManager {
         return players;
     }
 
-    public synchronized void removePlayer(Player player) {
-        if (players.size() > 2) {
-            System.out.println(new StringBuffer(player.getName()).append(" says: 'I've had too many.  I need to stop.'").toString());
-        } else if (players.size() == 2) {
-            System.out.println("Waiting for " + player.getName() +" to finish");
-        } else {
-            throw new IllegalStateException("Game simulation is in invalid state for player: " + player.getName());
-        }
-        this.getPlayers().remove(player);
-    }
-
     public void makePlayerDrink(Player player, ExecutorService executorService) {
         if (player != null) {
             DrinkingTask drinkingTask = new DrinkingTask(player, this);
@@ -57,8 +46,9 @@ public class GameManager {
             Player choosenPlayer = players.get(selectedPlayerIndex);
             System.out.println(new StringBuffer(players.get(0).getName()).append(" says: '").append(choosenPlayer.getName()).append(", drink!'").toString());
             return choosenPlayer;
+        } else {
+            return null;
         }
-        return null;
     }
 
     public boolean isAnyPlayerDrinking() {

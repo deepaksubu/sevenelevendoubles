@@ -23,6 +23,7 @@ public class Player {
     private int noOfDrinksFinished;
     private int noOfDrinksDrinking;
     private long speedOfDrinkingInMillis;
+    private boolean active;
 
     /**
      * Make sure that the player name is never empty and the speedOfDrinkingInMillis is always positive.
@@ -52,7 +53,6 @@ public class Player {
         }
         System.out.println(stringBuffer.toString());
     }
-
 
     public synchronized void startDrinking(int maxDrinks) {
         if (noOfDrinksFinished + noOfDrinksDrinking < maxDrinks) {
@@ -86,10 +86,6 @@ public class Player {
         return (noOfDrinksDrinking + noOfDrinksFinished);
     }
 
-    public synchronized int maxDrinksAllowedToBeFinished() {
-        return (noOfDrinksFinished + 1);
-    }
-
     public synchronized String getName() {
         return name;
     }
@@ -119,13 +115,4 @@ public class Player {
         return name.hashCode();
     }
 
-    public synchronized void drink(GameManager gameManager) throws InterruptedException {
-        int maxDrinks1 = gameManager.getMaxDrinks();
-        this.startDrinking(maxDrinks1);
-        Thread.sleep(getSpeedOfDrinkingInMillis());
-        endDrinking(maxDrinks1);
-        if (getTotalDrinks() == maxDrinks1) {
-            gameManager.removePlayer(this);
-        }
-    }
 }
