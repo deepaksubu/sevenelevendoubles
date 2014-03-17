@@ -51,6 +51,7 @@ public class Simulator {
         } finally {
             scanner.close();
         }
+        System.exit(0);
 
     }
 
@@ -67,7 +68,7 @@ public class Simulator {
         } else if (command.equalsIgnoreCase(CommandExecutor.SPEED_COMMAND)) {
             this.rollSpeed = commandExecutor.executeSpeedCommand(args[1]);
         } else if (command.equalsIgnoreCase(CommandExecutor.MAX_COMMAND)) {
-            Player.setMaxDrinks(commandExecutor.executeMaxDrinksCommand(args[1]));
+            Player.maxDrinks = commandExecutor.executeMaxDrinksCommand(args[1]);
         } else if (command.equalsIgnoreCase(CommandExecutor.START_COMMAND)) {
             start = commandExecutor.executeStartCommand(initialPlayersList);
         } else {

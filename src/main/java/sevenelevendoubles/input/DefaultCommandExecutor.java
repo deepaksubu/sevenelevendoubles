@@ -46,25 +46,27 @@ public class DefaultCommandExecutor implements CommandExecutor {
     @Override
     public Player executeAddCommand(String[] args, List<Player> existingPlayers) {
         Player player = null;
-        if (args.length < 3) {
-            System.out.println(GameMessages.INVALID_ARGUMENTS);
-        }
-        if (args[1] != null && !args[1].trim().isEmpty()) {
-            String name = args[1].trim();
-            int speedOfDrinking = parseIntegerArgument(args[2]);
-            if (speedOfDrinking > 0) {
-                if (!existingPlayers.contains(player)) {
-                    player = new Player(name, speedOfDrinking * 1000);
+        if (args.length >= 3) {
+            if (args[1] != null && !args[1].trim().isEmpty()) {
+                String name = args[1].trim();
+                int speedOfDrinking = parseIntegerArgument(args[2]);
+                if (speedOfDrinking > 0) {
+                    if (!existingPlayers.contains(player)) {
+                        player = new Player(name, speedOfDrinking * 1000);
+                    } else {
+                        System.out.println(GameMessages.NAME_ALREADY_TAKEN);
+                    }
                 } else {
-                    System.out.println(GameMessages.NAME_ALREADY_TAKEN);
+                    System.out.println(GameMessages.INVALID_NUMBER_MESSAGE);
                 }
             } else {
-                System.out.println(GameMessages.INVALID_NUMBER_MESSAGE);
+                System.out.println(GameMessages.INVALID_NAME);
             }
+            return player;
         } else {
-            System.out.println(GameMessages.INVALID_NAME);
+            System.out.println(GameMessages.INVALID_ARGUMENTS);
+            return null;
         }
-        return player;
     }
 
     int parseIntegerArgument(String argument) {

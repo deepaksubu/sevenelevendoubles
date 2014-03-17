@@ -75,7 +75,13 @@ public class GameManager implements PlayerRemover {
 
         System.out.println(new StringBuffer(players.get(0).getName()).append(" rolled a ").append(diceRollOutput.getMessage()).toString());
         if (diceRollOutput.isAWin()) {
-            Player player = selectForDrinking(selector.selectPlayer(players.size() - 1));
+            Player player;
+            try {
+                player = selectForDrinking(selector.selectPlayer(players.size() - 1));
+            } catch (ArrayIndexOutOfBoundsException aib) {
+                // Sometimes, the choosen player maybe removed by another thread in which case just do the selection again
+                player = selectForDrinking(selector.selectPlayer(players.size() - 1));
+            }
             makePlayerDrink(player);
         } else {
             if (!isAnyPlayerDrinking()) {

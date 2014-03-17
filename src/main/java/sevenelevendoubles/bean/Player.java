@@ -18,7 +18,8 @@ import java.util.concurrent.*;
 public class Player implements Runnable {
 
     private final static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
-    private static int maxDrinks = 5;
+
+    public static int maxDrinks = 5;
 
     private int noOfDrinksFinished;
     private int noOfDrinksDrinking;
@@ -32,25 +33,13 @@ public class Player implements Runnable {
         return noOfDrinksFinished;
     }
 
-    public static void setMaxDrinks(int maxDrinks) {
-        Player.maxDrinks = maxDrinks;
-    }
-
     public void setPlayerRemover(PlayerRemover playerRemover) {
         this.playerRemover = playerRemover;
-    }
-
-    public static ScheduledExecutorService getScheduledExecutorService() {
-        return scheduledExecutorService;
     }
 
 
     /**
      * Make sure that the player name is never empty and the speedOfDrinkingInMillis is always positive.
-     *
-     *
-     *
-     *
      *
      * @param name
      * @param speedOfDrinking

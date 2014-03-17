@@ -15,8 +15,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class GameManagerTest {
 
-    public static final int MAX_DRINKS = 4;
-
     @Test
     public void testChoosePlayerForDrinking() throws Exception {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
@@ -36,8 +34,7 @@ public class GameManagerTest {
     @Test
     public void testMakePlayerDrink () throws InterruptedException {
         List<Player> players = new CopyOnWriteArrayList<>();
-
-        int maxDrinks = 4;
+        Player.maxDrinks = 4;
         Player alex = new Player("Alex", 40);
         Player bob = new Player("Bob", 40);
         Player chris = new Player("Chris", 40);
@@ -49,25 +46,25 @@ public class GameManagerTest {
         gameManager.makePlayerDrink(alex);
         gameManager.makePlayerDrink(alex);
         gameManager.makePlayerDrink(alex);
-        validatePlayerDrinkingState(alex, 4, 0, maxDrinks);
+        validatePlayerDrinkingState(alex, 4, 0);
         Thread.sleep(200);
-        validatePlayerDrinkingState(alex, 0, 4, maxDrinks);
+        validatePlayerDrinkingState(alex, 0, 4);
 
         gameManager.makePlayerDrink(bob);
         gameManager.makePlayerDrink(bob);
-        validatePlayerDrinkingState(bob, 2, 0, maxDrinks);
+        validatePlayerDrinkingState(bob, 2, 0);
         Thread.sleep(100);
-        validatePlayerDrinkingState(bob, 0, 2, maxDrinks);
+        validatePlayerDrinkingState(bob, 0, 2);
 
         gameManager.makePlayerDrink(chris);
         gameManager.makePlayerDrink(chris);
-        validatePlayerDrinkingState(chris, 2, 0, maxDrinks);
+        validatePlayerDrinkingState(chris, 2, 0);
         Thread.sleep(100);
-        validatePlayerDrinkingState(chris, 0, 2, maxDrinks);
+        validatePlayerDrinkingState(chris, 0, 2);
     }
 
 
-    private void validatePlayerDrinkingState(Player player, int expectedNoOfDrinksDrinking, int exectedNoOfDrinksFinished, int maxDrinksAllowed) {
+    private void validatePlayerDrinkingState(Player player, int expectedNoOfDrinksDrinking, int exectedNoOfDrinksFinished) {
         Assert.assertEquals(expectedNoOfDrinksDrinking, player.getNoOfDrinksDrinking());
         Assert.assertEquals(exectedNoOfDrinksFinished, player.getNoOfDrinksFinished());
     }

@@ -29,7 +29,7 @@ public class SimulatorTest {
 
     private List<Player> createInitialPlayerList() {
         List<Player> players = new ArrayList<>();
-        int maxDrinks = 1;
+        Player.maxDrinks = 1;
         players.add(new Player("Alex", 3));
         players.add(new Player("Bob", 4));
         players.add(new Player("Chris", 5));
@@ -38,7 +38,7 @@ public class SimulatorTest {
 
     @Test
     public void testStartSimulation() throws Exception {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             Simulator simulator = new Simulator(new DeterministicSelector(), new DummyCommandExecutor());
             simulator.setInitialPlayersList(createInitialPlayerList());
             simulator.setRollSpeed(1);
