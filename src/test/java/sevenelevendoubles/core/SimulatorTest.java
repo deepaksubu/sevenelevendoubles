@@ -18,7 +18,7 @@ public class SimulatorTest {
         Simulator simulator = new Simulator(new RandomizedSelector(), new DefaultCommandExecutor());
         List<Player> players = createInitialPlayerList();
         simulator.setInitialPlayersList(players);
-        GameManager gameManager = simulator.createGameManager();
+        GameManager gameManager = new GameManager(players, 3);
         Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Alex", 3, 3));
         Assert.assertEquals(gameManager.getPlayers(), players);
     }

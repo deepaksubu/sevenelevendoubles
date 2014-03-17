@@ -4,9 +4,6 @@ import sevenelevendoubles.entity.Player;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 /**
  *
@@ -25,7 +22,6 @@ public class GameManager implements PlayerRemover {
 
     private List<Player> players;
     private final int maxDrinks;
-    public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
     public GameManager(List<Player> players, int maxDrinks) {
         this.players = new CopyOnWriteArrayList<>(players);
@@ -62,7 +58,7 @@ public class GameManager implements PlayerRemover {
         return false;
     }
 
-    public Result simulatePlayerTurn(DiceRollOutput diceRollOutput, ExecutorService executorService) {
+    public Result simulatePlayerTurn(DiceRollOutput diceRollOutput, Selector selector) {
         if (getPlayers().size() == 1) {
             System.out.println(players.get(0).getName() + " is the winner");
             return new Result(players.get(0), true);
@@ -76,7 +72,7 @@ public class GameManager implements PlayerRemover {
 
         System.out.println(new StringBuffer(players.get(0).getName()).append(" rolled a ").append(diceRollOutput.getMessage()).toString());
         if (diceRollOutput.isAWin()) {
-            Player player = selectForDrinking(new RandomizedSelector().selectPlayer(players.size() - 1));
+            Player player = selectForDrinking(selector.selectPlayer(players.size() - 1));
             makePlayerDrink(player);
         } else {
             if (!isAnyPlayerDrinking()) {

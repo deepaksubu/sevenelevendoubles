@@ -18,8 +18,7 @@ public class Simulator {
 
     private CommandExecutor commandExecutor;
     private List<Player> initialPlayersList = new ArrayList<>();
-    final ExecutorService executorService = Executors.newCachedThreadPool();
-    final Selector selector;
+    private final Selector selector;
 
     public void setRollSpeed(int rollSpeed) {
         this.rollSpeed = rollSpeed;
@@ -80,22 +79,17 @@ public class Simulator {
     }
 
     public Player startSimulation() {
-        GameManager gameManager = createGameManager();
-        Result result = gameManager.simulatePlayerTurn(new DiceRollOutput(selector.selectDiceRoll(), selector.selectDiceRoll()), executorService);
+        GameManager gameManager = new GameManager(initialPlayersList, maxDrinks);
+        Result result = gameManager.simulatePlayerTurn(new DiceRollOutput(selector.selectDiceRoll(), selector.selectDiceRoll()), selector);
         while (!result.isGameFinished()) {
             try {
                 Thread.sleep(rollSpeed);
-                result = gameManager.simulatePlayerTurn(new DiceRollOutput(selector.selectDiceRoll(), selector.selectDiceRoll()), executorService);
+                result = gameManager.simulatePlayerTurn(new DiceRollOutput(selector.selectDiceRoll(), selector.selectDiceRoll()), selector);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         return result.getPlayer();
-    }
-
-    public GameManager createGameManager() {
-        GameManager gameManager = new GameManager(initialPlayersList, maxDrinks);
-        return gameManager;
     }
 
     public static void main(String[] args) {

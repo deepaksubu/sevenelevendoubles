@@ -6,7 +6,6 @@ import sevenelevendoubles.entity.Player;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Executors;
 
 /**
  * User: deepak
@@ -28,7 +27,7 @@ public class GameManagerTest {
     public void testSimulatePlayerTurn_WinningThrow() {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
         DiceRollOutput doubles = new DiceRollOutput(2,2);
-        gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool());
+        gameManager.simulatePlayerTurn(doubles, new RandomizedSelector());
         Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Alex", 3, MAX_DRINKS));
     }
 
@@ -37,9 +36,9 @@ public class GameManagerTest {
         List<Player> players = new CopyOnWriteArrayList<>();
 
         int maxDrinks = 4;
-        Player alex = new Player("Alex", 300, maxDrinks);
-        Player bob = new Player("Bob", 400, maxDrinks);
-        Player chris = new Player("Chris", 500, maxDrinks);
+        Player alex = new Player("Alex", 40, maxDrinks);
+        Player bob = new Player("Bob", 40, maxDrinks);
+        Player chris = new Player("Chris", 40, maxDrinks);
         players.add(alex);
         players.add(bob);
         players.add(chris);
@@ -48,36 +47,21 @@ public class GameManagerTest {
         gameManager.makePlayerDrink(alex);
         gameManager.makePlayerDrink(alex);
         gameManager.makePlayerDrink(alex);
-        gameManager.makePlayerDrink(bob);
-        gameManager.makePlayerDrink(bob);
-        gameManager.makePlayerDrink(chris);
-        gameManager.makePlayerDrink(chris);
         validatePlayerDrinkingState(alex, 4, 0, maxDrinks);
-        validatePlayerDrinkingState(bob, 2, 0, maxDrinks);
-        validatePlayerDrinkingState(bob, 2, 0, maxDrinks);
-        Thread.sleep(2000);
-        System.out.println(alex.getNoOfDrinksDrinking() + ": finished : " + alex.getNoOfDrinksFinished());
+        Thread.sleep(200);
         validatePlayerDrinkingState(alex, 0, 4, maxDrinks);
-    }
 
+        gameManager.makePlayerDrink(bob);
+        gameManager.makePlayerDrink(bob);
+        validatePlayerDrinkingState(bob, 2, 0, maxDrinks);
+        Thread.sleep(100);
+        validatePlayerDrinkingState(bob, 0, 2, maxDrinks);
 
-    @Test
-    public void testMakePlayerDrink_MoreDrinksThanMax() throws InterruptedException {
-
-        List<Player> players = new CopyOnWriteArrayList<>();
-        int maxDrinks = 1;
-        Player alex = new Player("Alex", 300, maxDrinks);
-        Player bob = new Player("Bob", 400, maxDrinks);
-        Player chris = new Player("Chris", 500, maxDrinks);
-        players.add(alex);
-        players.add(bob);
-        players.add(chris);
-        GameManager gameManager = new GameManager(players, maxDrinks);
-        gameManager.makePlayerDrink(alex);
-        gameManager.makePlayerDrink(alex);
-        gameManager.makePlayerDrink(alex);
-        gameManager.makePlayerDrink(alex);
-        Thread.sleep(5000);
+        gameManager.makePlayerDrink(chris);
+        gameManager.makePlayerDrink(chris);
+        validatePlayerDrinkingState(chris, 2, 0, maxDrinks);
+        Thread.sleep(100);
+        validatePlayerDrinkingState(chris, 0, 2, maxDrinks);
     }
 
 
@@ -91,7 +75,7 @@ public class GameManagerTest {
     public void testSimulatePlayerTurn_LoosingThrow() {
         GameManager gameManager = initGameManagerWithMostlySoberPlayer();
         DiceRollOutput doubles = new DiceRollOutput(2,3);
-        gameManager.simulatePlayerTurn(doubles, Executors.newCachedThreadPool() );
+        gameManager.simulatePlayerTurn(doubles, new RandomizedSelector());
         Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Bob", 4, MAX_DRINKS));
     }
 

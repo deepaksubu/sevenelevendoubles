@@ -1,30 +1,31 @@
 package sevenelevendoubles.entity;
 
 import sevenelevendoubles.core.PlayerRemover;
-import sevenelevendoubles.core.GameManager;
 
 import java.util.concurrent.*;
 
 /**
  * The central entity for the seven eleven game.
- * Each player should always be instantiated with a name and speedOfDrinking.
+ * Each player should always be instantiated with a name and speedOfDrinking and the maxDrinks allowed
  * A player is identified by his or her name.
  *
- * At any point of time, the player can be in two states, drinking or not drinking.
- * If a player is in drinking state, then the noOfDrinksDrinking always has to be greater than zero.
- *
- * noOfDrinksFinished and noOfDrinksDrinking which are self explanatory.
+ * There are two state variables: noOfDrinksFinished and noOfDrinksDrinking which are self explanatory.
+ * Once the noOfDrinksFinished becomes equal to the maxDrinks, no further drinking is allowed and the remove method of the PlayerRemover interface is called.
  *
  * User: deepak
  * Date: 3/2/14
  */
-public class Player implements Callable<Player> {
+public class Player implements Runnable {
+    //** At max there can be ten players who can be drinking concurrently
+    private final static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
+    private final int maxDrinks;
 
-    private String name;
     private int noOfDrinksFinished;
     private int noOfDrinksDrinking;
     private long speedOfDrinkingInMillis;
-    private final int maxDrinks;
+
+    private String name;
+    private PlayerRemover playerRemover;
 
     public int getNoOfDrinksFinished() {
         return noOfDrinksFinished;
@@ -34,7 +35,6 @@ public class Player implements Callable<Player> {
         this.playerRemover = playerRemover;
     }
 
-    private PlayerRemover playerRemover;
 
     /**
      * Make sure that the player name is never empty and the speedOfDrinkingInMillis is always positive.
@@ -76,38 +76,29 @@ public class Player implements Callable<Player> {
             noOfDrinksDrinking ++;
 
             if (noOfDrinksDrinking == 1) {
-                GameManager.scheduledExecutorService.schedule(this, speedOfDrinkingInMillis, TimeUnit.MILLISECONDS);
+                scheduledExecutorService.schedule(this, speedOfDrinkingInMillis, TimeUnit.MILLISECONDS);
             }
         }
     }
 
-    public synchronized void endDrinking() throws MaximumDrinksExceededException {
-        if (noOfDrinksDrinking < 1) {
-            throw new IllegalStateException(new StringBuffer(name).append("No of drinks drinking should never be negative").toString());
-        }
-
-        if (noOfDrinksFinished >= maxDrinks) {
-            throw new MaximumDrinksExceededException(name);
-        }
-
-        noOfDrinksDrinking--;
-        noOfDrinksFinished++;
-
+    // This function will recursively schedule itself after the delay Player#speedOfDrinkingInMillis
+    public synchronized void endDrinking() {
         if (noOfDrinksDrinking > 0) {
-            ScheduledFuture<Player> schedule = GameManager.scheduledExecutorService.schedule(this, speedOfDrinkingInMillis, TimeUnit.MILLISECONDS);
+            if (noOfDrinksFinished < maxDrinks) {
+                noOfDrinksDrinking--;
+                noOfDrinksFinished++;
+                if (noOfDrinksDrinking > 0) {
+                    scheduledExecutorService.schedule(this, speedOfDrinkingInMillis, TimeUnit.MILLISECONDS);
+                }
+
+                if (noOfDrinksDrinking == 0) {
+                    if (noOfDrinksFinished == maxDrinks) {
+                        playerRemover.removeFromPlayerList(this);
+                        System.out.println(new StringBuffer(name).append(" says: 'I've had too many.  I need to stop.'").toString());
+                    }
+                }
+            }
         }
-
-
-        if (noOfDrinksFinished == maxDrinks) {
-            playerRemover.removeFromPlayerList(this);
-            System.out.println(new StringBuffer(name).append(" says: 'I've had too many.  I need to stop.'").toString());
-        }
-
-        if (noOfDrinksFinished > maxDrinks) {
-            System.out.println("Throwing Exception");
-            throw new MaximumDrinksExceededException(name);
-        }
-
     }
 
     public synchronized String getName() {
@@ -140,9 +131,8 @@ public class Player implements Callable<Player> {
     }
 
     @Override
-    public Player call() throws MaximumDrinksExceededException {
+    public void run() {
         endDrinking();
-        return this;
     }
 
 
