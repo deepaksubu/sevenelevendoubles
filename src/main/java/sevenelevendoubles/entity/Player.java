@@ -72,7 +72,7 @@ public class Player implements Runnable {
 
     // Increment the drinking count for a given player. This will only be applicable if the noOfDrinksFinished is less than the maxAllowedDrinks
     public synchronized void startDrinking() {
-        if (noOfDrinksFinished < maxDrinks) {
+        if (noOfDrinksFinished + noOfDrinksDrinking < maxDrinks) {
             noOfDrinksDrinking ++;
 
             if (noOfDrinksDrinking == 1) {

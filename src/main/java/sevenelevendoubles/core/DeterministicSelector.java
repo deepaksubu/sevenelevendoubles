@@ -32,7 +32,7 @@ public class DeterministicSelector implements Selector {
 
     @Override
     public int selectPlayer(int N) {
-        return N-1;
+        return N;
     }
 
     @Override

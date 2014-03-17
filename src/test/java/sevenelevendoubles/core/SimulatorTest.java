@@ -25,22 +25,21 @@ public class SimulatorTest {
 
     private List<Player> createInitialPlayerList() {
         List<Player> players = new ArrayList<>();
-        int maxDrinks = 3;
-        players.add(new Player("Alex", 30, maxDrinks));
-        players.add(new Player("Bob", 40, maxDrinks));
-        players.add(new Player("Chris", 50, maxDrinks));
+        int maxDrinks = 1;
+        players.add(new Player("Alex", 3, maxDrinks));
+        players.add(new Player("Bob", 4, maxDrinks));
+        players.add(new Player("Chris", 5, maxDrinks));
         return players;
     }
 
     @Test
     public void testStartSimulation() throws Exception {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             Simulator simulator = new Simulator(new DeterministicSelector(), new DummyCommandExecutor());
             simulator.setInitialPlayersList(createInitialPlayerList());
-            simulator.setMaxDrinks(1);
-            simulator.setRollSpeed(10);
+            simulator.setRollSpeed(1);
             Player player = simulator.startSimulation();
-            Assert.assertEquals(player.getName(), "Alex");
+            Assert.assertEquals("Alex", player.getName());
         }
     }
 

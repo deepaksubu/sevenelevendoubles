@@ -36,7 +36,9 @@ public class GameManager implements PlayerRemover {
     }
 
     public void makePlayerDrink(Player player) {
-        player.startDrinking();
+        if (player != null) {
+            player.startDrinking();
+        }
     }
 
     public Player selectForDrinking(int selectedPlayerIndex) {
