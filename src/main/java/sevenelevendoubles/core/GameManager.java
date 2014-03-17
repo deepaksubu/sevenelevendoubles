@@ -1,6 +1,9 @@
 package sevenelevendoubles.core;
 
-import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.bean.DiceRollOutput;
+import sevenelevendoubles.bean.Player;
+import sevenelevendoubles.bean.Result;
+import sevenelevendoubles.selector.Selector;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -21,11 +24,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameManager implements PlayerRemover {
 
     private List<Player> players;
-    private final int maxDrinks;
 
-    public GameManager(List<Player> players, int maxDrinks) {
+    public GameManager(List<Player> players) {
         this.players = new CopyOnWriteArrayList<>(players);
-        this.maxDrinks = maxDrinks;
         for (Player player: players) {
             player.setPlayerRemover(this);
         }

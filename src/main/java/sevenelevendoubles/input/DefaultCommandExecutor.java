@@ -1,13 +1,14 @@
-package sevenelevendoubles.core;
+package sevenelevendoubles.input;
 
-import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.core.GameMessages;
+import sevenelevendoubles.bean.Player;
 
 import java.util.List;
 
 public class DefaultCommandExecutor implements CommandExecutor {
 
     public DefaultCommandExecutor() {
-        System.out.println(HELP_COMMAND);
+        System.out.println(GameMessages.HELP_STRING);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class DefaultCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public Player executeAddCommand(String[] args, List<Player> existingPlayers, int maxDrinks) {
+    public Player executeAddCommand(String[] args, List<Player> existingPlayers) {
         Player player = null;
         if (args.length < 3) {
             System.out.println(GameMessages.INVALID_ARGUMENTS);
@@ -53,7 +54,7 @@ public class DefaultCommandExecutor implements CommandExecutor {
             int speedOfDrinking = parseIntegerArgument(args[2]);
             if (speedOfDrinking > 0) {
                 if (!existingPlayers.contains(player)) {
-                    player = new Player(name, speedOfDrinking * 1000, maxDrinks);
+                    player = new Player(name, speedOfDrinking * 1000);
                 } else {
                     System.out.println(GameMessages.NAME_ALREADY_TAKEN);
                 }

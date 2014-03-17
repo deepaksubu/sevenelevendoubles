@@ -1,4 +1,4 @@
-package sevenelevendoubles.core;
+package sevenelevendoubles.bean;
 
 /**
  * The output of the dice roll. It has two fields

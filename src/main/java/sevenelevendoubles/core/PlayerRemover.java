@@ -1,6 +1,6 @@
 package sevenelevendoubles.core;
 
-import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.bean.Player;
 
 /**
  *

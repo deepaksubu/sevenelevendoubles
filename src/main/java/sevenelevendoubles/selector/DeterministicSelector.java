@@ -1,9 +1,9 @@
-package sevenelevendoubles.core;
+package sevenelevendoubles.selector;
+
+import sevenelevendoubles.selector.Selector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * User: deepak

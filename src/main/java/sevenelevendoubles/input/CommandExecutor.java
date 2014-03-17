@@ -1,6 +1,6 @@
-package sevenelevendoubles.core;
+package sevenelevendoubles.input;
 
-import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.bean.Player;
 
 import java.util.List;
 
@@ -21,5 +21,5 @@ public interface CommandExecutor {
 
     int executeSpeedCommand(String arg);
 
-    Player executeAddCommand(String[] args, List<Player> existingPlayers, int maxDrinks);
+    Player executeAddCommand(String[] args, List<Player> existingPlayers);
 }

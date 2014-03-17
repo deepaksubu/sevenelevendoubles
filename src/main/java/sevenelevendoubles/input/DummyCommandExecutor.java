@@ -1,6 +1,6 @@
-package sevenelevendoubles.core;
+package sevenelevendoubles.input;
 
-import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.bean.Player;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class DummyCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public Player executeAddCommand(String[] args, List<Player> existingPlayers, int maxDrinks) {
+    public Player executeAddCommand(String[] args, List<Player> existingPlayers) {
         return null;
     }
 }

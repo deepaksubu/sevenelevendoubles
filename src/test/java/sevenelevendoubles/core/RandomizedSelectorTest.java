@@ -2,6 +2,8 @@ package sevenelevendoubles.core;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import sevenelevendoubles.selector.RandomizedSelector;
+import sevenelevendoubles.selector.Selector;
 
 /**
  * User: deepak

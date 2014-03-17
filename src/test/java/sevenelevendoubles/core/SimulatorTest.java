@@ -2,7 +2,11 @@ package sevenelevendoubles.core;
 
 import junit.framework.Assert;
 import org.junit.Test;
-import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.bean.Player;
+import sevenelevendoubles.input.DefaultCommandExecutor;
+import sevenelevendoubles.input.DummyCommandExecutor;
+import sevenelevendoubles.selector.DeterministicSelector;
+import sevenelevendoubles.selector.RandomizedSelector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +22,17 @@ public class SimulatorTest {
         Simulator simulator = new Simulator(new RandomizedSelector(), new DefaultCommandExecutor());
         List<Player> players = createInitialPlayerList();
         simulator.setInitialPlayersList(players);
-        GameManager gameManager = new GameManager(players, 3);
-        Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Alex", 3, 3));
+        GameManager gameManager = new GameManager(players);
+        Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Alex", 3));
         Assert.assertEquals(gameManager.getPlayers(), players);
     }
 
     private List<Player> createInitialPlayerList() {
         List<Player> players = new ArrayList<>();
         int maxDrinks = 1;
-        players.add(new Player("Alex", 3, maxDrinks));
-        players.add(new Player("Bob", 4, maxDrinks));
-        players.add(new Player("Chris", 5, maxDrinks));
+        players.add(new Player("Alex", 3));
+        players.add(new Player("Bob", 4));
+        players.add(new Player("Chris", 5));
         return players;
     }
 

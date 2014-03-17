@@ -1,10 +1,14 @@
 package sevenelevendoubles.core;
 
-import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.bean.DiceRollOutput;
+import sevenelevendoubles.bean.Player;
+import sevenelevendoubles.bean.Result;
+import sevenelevendoubles.input.CommandExecutor;
+import sevenelevendoubles.input.DefaultCommandExecutor;
+import sevenelevendoubles.selector.RandomizedSelector;
+import sevenelevendoubles.selector.Selector;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * This gets the inputs from the user and does the game simulation.
@@ -24,13 +28,7 @@ public class Simulator {
         this.rollSpeed = rollSpeed;
     }
 
-    public void setMaxDrinks(int maxDrinks) {
-        this.maxDrinks = maxDrinks;
-    }
-
     private int rollSpeed = 2000;
-
-    private int maxDrinks = 5;
 
     public Simulator(Selector selector, CommandExecutor commandExecutor) {
         this.selector = selector;
@@ -61,7 +59,7 @@ public class Simulator {
         if (command.equalsIgnoreCase(CommandExecutor.HELP_COMMAND)) {
             System.out.println(GameMessages.HELP_STRING);
         } else if (command.equalsIgnoreCase(CommandExecutor.ADD_COMMAND)) {
-            Player player = commandExecutor.executeAddCommand(args, initialPlayersList, maxDrinks);
+            Player player = commandExecutor.executeAddCommand(args, initialPlayersList);
             if (player != null) {
                 initialPlayersList.add(player);
                 player.toJoinedGameString();
@@ -69,7 +67,7 @@ public class Simulator {
         } else if (command.equalsIgnoreCase(CommandExecutor.SPEED_COMMAND)) {
             this.rollSpeed = commandExecutor.executeSpeedCommand(args[1]);
         } else if (command.equalsIgnoreCase(CommandExecutor.MAX_COMMAND)) {
-            this.maxDrinks = commandExecutor.executeMaxDrinksCommand(args[1]);
+            Player.setMaxDrinks(commandExecutor.executeMaxDrinksCommand(args[1]));
         } else if (command.equalsIgnoreCase(CommandExecutor.START_COMMAND)) {
             start = commandExecutor.executeStartCommand(initialPlayersList);
         } else {
@@ -79,7 +77,7 @@ public class Simulator {
     }
 
     public Player startSimulation() {
-        GameManager gameManager = new GameManager(initialPlayersList, maxDrinks);
+        GameManager gameManager = new GameManager(initialPlayersList);
         Result result = gameManager.simulatePlayerTurn(new DiceRollOutput(selector.selectDiceRoll(), selector.selectDiceRoll()), selector);
         while (!result.isGameFinished()) {
             try {

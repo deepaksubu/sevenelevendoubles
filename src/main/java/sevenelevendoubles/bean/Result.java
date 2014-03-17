@@ -1,6 +1,6 @@
-package sevenelevendoubles.core;
+package sevenelevendoubles.bean;
 
-import sevenelevendoubles.entity.Player;
+import sevenelevendoubles.bean.Player;
 
 /**
  * The class indicates the result of a single turn.
@@ -11,19 +11,19 @@ import sevenelevendoubles.entity.Player;
  */
 public class Result {
 
+    private boolean finish;
+
+    private Player player;
+
+    public Result(Player player, boolean finish) {
+        this.finish = finish;
+        this.player = player;
+    }
     public boolean isGameFinished() {
         return finish;
     }
 
     public Player getPlayer() {
         return player;
-    }
-
-    private boolean finish;
-    private Player player;
-
-    public Result(Player player, boolean finish) {
-        this.finish = finish;
-        this.player = player;
     }
 }

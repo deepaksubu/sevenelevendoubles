@@ -1,11 +1,11 @@
-package sevenelevendoubles.entity;
+package sevenelevendoubles.bean;
 
 import sevenelevendoubles.core.PlayerRemover;
 
 import java.util.concurrent.*;
 
 /**
- * The central entity for the seven eleven game.
+ * The central bean for the seven eleven game.
  * Each player should always be instantiated with a name and speedOfDrinking and the maxDrinks allowed
  * A player is identified by his or her name.
  *
@@ -16,23 +16,32 @@ import java.util.concurrent.*;
  * Date: 3/2/14
  */
 public class Player implements Runnable {
-    //** At max there can be ten players who can be drinking concurrently
+
     private final static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
-    private final int maxDrinks;
+    private static int maxDrinks = 5;
 
     private int noOfDrinksFinished;
     private int noOfDrinksDrinking;
-    private long speedOfDrinkingInMillis;
 
+    private long speedOfDrinkingInMillis;
     private String name;
+    private volatile boolean cancel = false;
     private PlayerRemover playerRemover;
 
     public int getNoOfDrinksFinished() {
         return noOfDrinksFinished;
     }
 
+    public static void setMaxDrinks(int maxDrinks) {
+        Player.maxDrinks = maxDrinks;
+    }
+
     public void setPlayerRemover(PlayerRemover playerRemover) {
         this.playerRemover = playerRemover;
+    }
+
+    public static ScheduledExecutorService getScheduledExecutorService() {
+        return scheduledExecutorService;
     }
 
 
@@ -42,13 +51,12 @@ public class Player implements Runnable {
      *
      *
      *
+     *
      * @param name
      * @param speedOfDrinking
-     * @param maxDrinks
      * @return
      */
-    public Player(String name, long speedOfDrinking, int maxDrinks) {
-        this.maxDrinks = maxDrinks;
+    public Player(String name, long speedOfDrinking) {
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Player name should never be empty");
         } else {
@@ -95,6 +103,7 @@ public class Player implements Runnable {
                     if (noOfDrinksFinished == maxDrinks) {
                         playerRemover.removeFromPlayerList(this);
                         System.out.println(new StringBuffer(name).append(" says: 'I've had too many.  I need to stop.'").toString());
+                        cancel = true;
                     }
                 }
             }
@@ -132,7 +141,9 @@ public class Player implements Runnable {
 
     @Override
     public void run() {
-        endDrinking();
+        if (!cancel) {
+            endDrinking();
+        }
     }
 
 

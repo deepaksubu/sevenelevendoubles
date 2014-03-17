@@ -1,4 +1,4 @@
-package sevenelevendoubles.core;
+package sevenelevendoubles.selector;
 
 /**
  * User: deepak

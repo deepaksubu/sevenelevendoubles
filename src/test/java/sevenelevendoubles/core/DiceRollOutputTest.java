@@ -2,6 +2,7 @@ package sevenelevendoubles.core;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import sevenelevendoubles.bean.DiceRollOutput;
 
 /**
  * User: deepak
