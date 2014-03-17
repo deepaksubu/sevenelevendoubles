@@ -1,11 +1,12 @@
 package sevenelevendoubles.core;
 
 import sevenelevendoubles.entity.Player;
-import java.lang.IllegalStateException;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 /**
  *
@@ -20,25 +21,26 @@ import java.util.concurrent.ExecutorService;
  * User: deepak
  * Date: 3/8/14
  */
-public class GameManager {
+public class GameManager implements PlayerRemover {
 
     private List<Player> players;
     private final int maxDrinks;
+    public static ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
 
     public GameManager(List<Player> players, int maxDrinks) {
         this.players = new CopyOnWriteArrayList<>(players);
         this.maxDrinks = maxDrinks;
+        for (Player player: players) {
+            player.setPlayerRemover(this);
+        }
     }
 
     public List<Player> getPlayers() {
         return players;
     }
 
-    public void makePlayerDrink(Player player, ExecutorService executorService) {
-        if (player != null) {
-            DrinkingTask drinkingTask = new DrinkingTask(player, this);
-            executorService.execute(drinkingTask);
-        }
+    public void makePlayerDrink(Player player) {
+        player.startDrinking();
     }
 
     public Player selectForDrinking(int selectedPlayerIndex) {
@@ -75,7 +77,7 @@ public class GameManager {
         System.out.println(new StringBuffer(players.get(0).getName()).append(" rolled a ").append(diceRollOutput.getMessage()).toString());
         if (diceRollOutput.isAWin()) {
             Player player = selectForDrinking(new RandomizedSelector().selectPlayer(players.size() - 1));
-            makePlayerDrink(player, executorService);
+            makePlayerDrink(player);
         } else {
             if (!isAnyPlayerDrinking()) {
                 Player loser = players.remove(0);
@@ -85,7 +87,9 @@ public class GameManager {
         return new Result(players.get(0), false);
     }
 
-    public int getMaxDrinks() {
-        return maxDrinks;
+    @Override
+    public Player removeFromPlayerList(Player player) {
+        players.remove(player);
+        return player;
     }
 }

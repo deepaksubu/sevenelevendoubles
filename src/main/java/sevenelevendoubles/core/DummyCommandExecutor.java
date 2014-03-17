@@ -30,7 +30,7 @@ public class DummyCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public Player executeAddCommand(String[] args, List<Player> existingPlayers) {
+    public Player executeAddCommand(String[] args, List<Player> existingPlayers, int maxDrinks) {
         return null;
     }
 }

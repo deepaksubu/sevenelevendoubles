@@ -43,7 +43,7 @@ public class DefaultCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public Player executeAddCommand(String[] args, List<Player> existingPlayers) {
+    public Player executeAddCommand(String[] args, List<Player> existingPlayers, int maxDrinks) {
         Player player = null;
         if (args.length < 3) {
             System.out.println(GameMessages.INVALID_ARGUMENTS);
@@ -53,7 +53,7 @@ public class DefaultCommandExecutor implements CommandExecutor {
             int speedOfDrinking = parseIntegerArgument(args[2]);
             if (speedOfDrinking > 0) {
                 if (!existingPlayers.contains(player)) {
-                    player = new Player(name, speedOfDrinking * 1000);
+                    player = new Player(name, speedOfDrinking * 1000, maxDrinks);
                 } else {
                     System.out.println(GameMessages.NAME_ALREADY_TAKEN);
                 }

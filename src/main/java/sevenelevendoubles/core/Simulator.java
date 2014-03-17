@@ -62,7 +62,7 @@ public class Simulator {
         if (command.equalsIgnoreCase(CommandExecutor.HELP_COMMAND)) {
             System.out.println(GameMessages.HELP_STRING);
         } else if (command.equalsIgnoreCase(CommandExecutor.ADD_COMMAND)) {
-            Player player = commandExecutor.executeAddCommand(args, initialPlayersList);
+            Player player = commandExecutor.executeAddCommand(args, initialPlayersList, maxDrinks);
             if (player != null) {
                 initialPlayersList.add(player);
                 player.toJoinedGameString();

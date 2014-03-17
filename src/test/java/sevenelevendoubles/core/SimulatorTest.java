@@ -19,15 +19,16 @@ public class SimulatorTest {
         List<Player> players = createInitialPlayerList();
         simulator.setInitialPlayersList(players);
         GameManager gameManager = simulator.createGameManager();
-        Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Alex", 3));
+        Assert.assertEquals(gameManager.getPlayers().get(0), new Player("Alex", 3, 3));
         Assert.assertEquals(gameManager.getPlayers(), players);
     }
 
     private List<Player> createInitialPlayerList() {
         List<Player> players = new ArrayList<>();
-        players.add(new Player("Alex", 30));
-        players.add(new Player("Bob", 40));
-        players.add(new Player("Chris", 50));
+        int maxDrinks = 3;
+        players.add(new Player("Alex", 30, maxDrinks));
+        players.add(new Player("Bob", 40, maxDrinks));
+        players.add(new Player("Chris", 50, maxDrinks));
         return players;
     }
 

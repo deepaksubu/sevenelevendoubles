@@ -21,5 +21,5 @@ public interface CommandExecutor {
 
     int executeSpeedCommand(String arg);
 
-    Player executeAddCommand(String[] args, List<Player> existingPlayers);
+    Player executeAddCommand(String[] args, List<Player> existingPlayers, int maxDrinks);
 }

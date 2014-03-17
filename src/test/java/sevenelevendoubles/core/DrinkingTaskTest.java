@@ -15,9 +15,11 @@ import java.util.concurrent.*;
  */
 public class DrinkingTaskTest {
 
+
+
     @Test
     public void testTaskSinglePlayerNoThreads() throws Exception {
-        Player alex = new Player("name", 100);
+        Player alex = new Player("name", 100, 4);
         DrinkingTask drinkingTask = new DrinkingTask(alex, createGameManager(5));
         drinkingTask.run();
         validatePlayerDrinkingState(alex, 0, 1, 100);
@@ -108,17 +110,18 @@ public class DrinkingTaskTest {
 
     private void validatePlayerDrinkingState(Player player, int expectedNoOfDrinksDrinking, int exectedNoOfDrinksFinished, int maxDrinksAllowed) {
         Assert.assertEquals(expectedNoOfDrinksDrinking, player.getNoOfDrinksDrinking());
-        Assert.assertEquals(exectedNoOfDrinksFinished, player.getTotalDrinks());
-        Assert.assertTrue(player.getTotalDrinks() <= maxDrinksAllowed);
+        Assert.assertEquals(exectedNoOfDrinksFinished, player.getNoOfDrinksFinished());
+        Assert.assertTrue(player.getNoOfDrinksFinished() <= maxDrinksAllowed);
+        Assert.assertTrue(player.getNoOfDrinksFinished() > maxDrinksAllowed);
     }
 
     private GameManager createGameManager(int maxDrinks) {
         List<Player> players = new ArrayList<>();
-        players.add(new Player("Alex", 100));
-        players.add(new Player("Bob", 200));
-        players.add(new Player("Chris", 200));
-        players.add(new Player("Damien", 200));
-        players.add(new Player("Erik", 200));
+        players.add(new Player("Alex", 100, maxDrinks));
+        players.add(new Player("Bob", 200, maxDrinks));
+        players.add(new Player("Chris", 200, maxDrinks));
+        players.add(new Player("Damien", 200, maxDrinks));
+        players.add(new Player("Erik", 200, maxDrinks));
         return new GameManager(players, maxDrinks);
     }
 
